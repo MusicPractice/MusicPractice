@@ -43,7 +43,7 @@
       border-radius: 1rem;
       color: #fff;
       text-decoration: none;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
       margin-bottom: 0.5rem;
 
       p {
