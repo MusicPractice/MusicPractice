@@ -13,10 +13,80 @@ const classesGenshin = ref<Record<string, string[]>>({
 });
 const pressedKeys = ref<string[]>([]);
 
+// 在页面加载时预先加载音频文件
+const audioFiles = {};
+
+function loadAudioFiles() {
+  const audioNames = ['古典大钢琴.m4a'];
+  const audioPromises = audioNames.map((audioName) => {
+    return new Promise((resolve, reject) => {
+      const audio = new Audio(`/audio/${audioName}`);
+      audio.addEventListener('canplaythrough', () => {
+        audioFiles[audioName] = audio;
+        resolve();
+      });
+      audio.addEventListener('error', () => {
+        reject(new Error(`Failed to load audio file: ${audioName}`));
+      });
+    });
+  });
+
+  return Promise.all(audioPromises);
+}
+
+/**
+ * 播放音效函数
+ */
+function playNote() {
+  const audioContext = new AudioContext();
+  const audioSource = audioContext.createBufferSource();
+
+  // 解码音频文件为AudioBuffer对象
+  audioContext.decodeAudioData(audioFiles['古典大钢琴.m4a'], function(buffer) {
+    // 将解码后的AudioBuffer对象设置给音频源节点
+    audioSource.buffer = buffer;
+    // 连接音频源节点到音频输出
+    audioSource.connect(audioContext.destination);
+    // 播放音频
+    audioSource.start();
+  });
+
+//   const startOffset = 4;
+//   const endOffset = 8;
+//   const duration = endOffset - startOffset;
+//   const sampleRate = audioBuffer.sampleRate;
+//   const startSample = startOffset * sampleRate;
+//   const endSample = endOffset * sampleRate;
+//   const numChannels = audioBuffer.numberOfChannels;
+// // 创建一个新的AudioBuffer来存储截取的音频数据
+//   const slicedBuffer = audioContext.createBuffer(
+//       numChannels,
+//       endSample - startSample,
+//       sampleRate
+//   );
+// // 复制截取的音频数据到新的AudioBuffer中
+//   for (let channel = 0; channel < numChannels; channel++) {
+//     const channelData = audioBuffer.getChannelData(channel);
+//     const slicedChannelData = slicedBuffer.getChannelData(channel);
+//     for (let i = startSample, j = 0; i < endSample; i++, j++) {
+//       slicedChannelData[j] = channelData[i];
+//     }
+//   }
+// // 将截取的音频数据设置给音频源节点
+//   audioSource.buffer = slicedBuffer;
+// // 连接音频源节点到音频输出
+//   audioSource.connect(audioContext.destination);
+// // 播放音频
+//   audioSource.start();
+}
+
+
 function handleKeydown(ev: KeyboardEvent) {
   if (pressedKeys.value?.includes(ev.key)) {
     return;
   }
+  console.log(ev.key);
+  playNote();
   pressedKeys.value?.push(ev.key);
   if (keybind.value === "genshin") {
     classesGenshin.value[ev.key.toUpperCase()].splice(
@@ -44,6 +114,14 @@ onMounted(() => {
   if (process.client) {
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
+    // 在页面加载时调用loadAudioFiles函数预先加载音频文件
+    loadAudioFiles()
+        .then(() => {
+          console.log('All audio files are loaded');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   }
 });
 

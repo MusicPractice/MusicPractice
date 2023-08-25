@@ -1,6 +1,7 @@
 <template>
   <div class="index">
-    <h1>音乐训练</h1>
+    <h1>首页</h1>
+    <p>内容正在完善中……</p>
   </div>
 </template>
 
