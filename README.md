@@ -65,3 +65,27 @@ yarn generate
 前端会每四秒切割一下。自动分成一个一个的音符。
 
 如果是用音乐软件生成音色文件，那就是bpm=120，四四拍，一个音符占一小节就可以了。
+
+
+
+## 目录结构
+
+```python
+├── app.vue # Nuxt 3 应用程序中的主组件 入口组件
+├── components # 组件目录，支持自动导入
+├── layouts # 布局目录
+├── composables # 公共函数，支持自动导入
+├── assets # 静态资源目录 与vue项目的assets相同
+├── middleware # 路由中间件框架
+├── nuxt.config.ts  # Nuxt 配置文件，可以理解成vue.config.js 文件名必须是nuxt.config 后缀名可以是.js,.ts或.mjs
+├── package.json
+├── pages # 基于文件的路由
+├── plugins #插件
+├── public # 不会参与打包，与vue项目的public类似直接挂在服务器的根目录
+├── README.md
+├── server
+├── tsconfig.json
+└── yarn.lock
+
+```
+

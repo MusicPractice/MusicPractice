@@ -5,4 +5,10 @@
   </div>
 </template>
 
+<script setup lang="ts">
+console.log('index...');
+const {data} = await useFetch('/api/hello');
+console.log(data);
+</script>
+
 <style scoped lang="scss"></style>

@@ -5,6 +5,7 @@
     <NuxtLink to="/sheetMusicPractice">五线谱练习</NuxtLink>
     <NuxtLink to="/listeningExercise">听力训练</NuxtLink>
     <NuxtLink to="/piano">键盘弹钢琴</NuxtLink>
+    <NuxtLink to="/works">个人音乐作品</NuxtLink>
     <NuxtLink to="/uppers">音乐区UP主推荐</NuxtLink>
 
     <div class="bottom-wrapper">
