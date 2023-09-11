@@ -20,6 +20,7 @@
 .uppers {
   text-align: center;
   padding: 4rem 10rem 0 10rem;
+  overflow: auto;
 
   h1 {
     margin-bottom: 3rem;
