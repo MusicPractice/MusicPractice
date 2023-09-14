@@ -42,42 +42,42 @@ function playNote() {
   const audioSource = audioContext.createBufferSource();
 
   // 解码音频文件为AudioBuffer对象
-  audioContext.decodeAudioData(audioFiles['古典大钢琴.m4a'], function(buffer) {
-    // 将解码后的AudioBuffer对象设置给音频源节点
-    audioSource.buffer = buffer;
-    // 连接音频源节点到音频输出
-    audioSource.connect(audioContext.destination);
-    // 播放音频
-    audioSource.start();
-  });
+  // audioContext.decodeAudioData(audioFiles['古典大钢琴.m4a'], function(buffer) {
+  //   // 将解码后的AudioBuffer对象设置给音频源节点
+  //   audioSource.buffer = buffer;
+  //   // 连接音频源节点到音频输出
+  //   audioSource.connect(audioContext.destination);
+  //   // 播放音频
+  //   audioSource.start();
+  // });
 
-//   const startOffset = 4;
-//   const endOffset = 8;
-//   const duration = endOffset - startOffset;
-//   const sampleRate = audioBuffer.sampleRate;
-//   const startSample = startOffset * sampleRate;
-//   const endSample = endOffset * sampleRate;
-//   const numChannels = audioBuffer.numberOfChannels;
-// // 创建一个新的AudioBuffer来存储截取的音频数据
-//   const slicedBuffer = audioContext.createBuffer(
-//       numChannels,
-//       endSample - startSample,
-//       sampleRate
-//   );
-// // 复制截取的音频数据到新的AudioBuffer中
-//   for (let channel = 0; channel < numChannels; channel++) {
-//     const channelData = audioBuffer.getChannelData(channel);
-//     const slicedChannelData = slicedBuffer.getChannelData(channel);
-//     for (let i = startSample, j = 0; i < endSample; i++, j++) {
-//       slicedChannelData[j] = channelData[i];
-//     }
-//   }
-// // 将截取的音频数据设置给音频源节点
-//   audioSource.buffer = slicedBuffer;
-// // 连接音频源节点到音频输出
-//   audioSource.connect(audioContext.destination);
-// // 播放音频
-//   audioSource.start();
+  const startOffset = 4;
+  const endOffset = 8;
+  const duration = endOffset - startOffset;
+  const sampleRate = audioBuffer.sampleRate;
+  const startSample = startOffset * sampleRate;
+  const endSample = endOffset * sampleRate;
+  const numChannels = audioBuffer.numberOfChannels;
+// 创建一个新的AudioBuffer来存储截取的音频数据
+  const slicedBuffer = audioContext.createBuffer(
+      numChannels,
+      endSample - startSample,
+      sampleRate
+  );
+// 复制截取的音频数据到新的AudioBuffer中
+  for (let channel = 0; channel < numChannels; channel++) {
+    const channelData = audioBuffer.getChannelData(channel);
+    const slicedChannelData = slicedBuffer.getChannelData(channel);
+    for (let i = startSample, j = 0; i < endSample; i++, j++) {
+      slicedChannelData[j] = channelData[i];
+    }
+  }
+// 将截取的音频数据设置给音频源节点
+  audioSource.buffer = slicedBuffer;
+// 连接音频源节点到音频输出
+  audioSource.connect(audioContext.destination);
+// 播放音频
+  audioSource.start();
 }
 
 
@@ -117,7 +117,7 @@ onMounted(() => {
     // 在页面加载时调用loadAudioFiles函数预先加载音频文件
     loadAudioFiles()
         .then(() => {
-          console.log('All audio files are loaded');
+          console.log('所有音色已经加载了');
         })
         .catch((error) => {
           console.error(error);

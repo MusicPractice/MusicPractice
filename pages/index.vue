@@ -6,9 +6,17 @@
 </template>
 
 <script setup lang="ts">
+// import ContentPage from "~/components/ContentPage.vue";
 console.log('index...');
 const {data} = await useFetch('/api/hello');
 console.log(data);
+// export default {
+//   components: {ContentPage}
+// }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+h1, h2, h3 {
+  text-align: center;
+}
+</style>
