@@ -16,68 +16,71 @@ const pressedKeys = ref<string[]>([]);
 // 在页面加载时预先加载音频文件
 const audioFiles = {};
 
-function loadAudioFiles() {
-  const audioNames = ['古典大钢琴.m4a'];
-  const audioPromises = audioNames.map((audioName) => {
-    return new Promise((resolve, reject) => {
-      const audio = new Audio(`/audio/${audioName}`);
-      audio.addEventListener('canplaythrough', () => {
-        audioFiles[audioName] = audio;
-        resolve();
-      });
-      audio.addEventListener('error', () => {
-        reject(new Error(`Failed to load audio file: ${audioName}`));
-      });
-    });
-  });
+// 在loadAudioFiles函数中使用loadAudioFile方法来加载音频文件
+function loadAudioFiles(): Promise<void> {
+  const audioUrl = '/audio/古典大钢琴.m4a';
 
-  return Promise.all(audioPromises);
+  return loadAudioFile(audioUrl)
+      .then((arrayBuffer) => {
+        const audioContext = new AudioContext();
+        return audioContext.decodeAudioData(arrayBuffer);
+      })
+      .then((audioBuffer) => {
+        audioFiles.grandPiano = audioBuffer;
+      });
 }
 
+function loadAudioFile(url: string): Promise<ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    fetch(url)
+        .then((response) => response.arrayBuffer())
+        .then((arrayBuffer) => resolve(arrayBuffer))
+        .catch((error) => reject(error));
+  });
+}
 /**
  * 播放音效函数
  */
-function playNote() {
+function playNote(): void {
   const audioContext = new AudioContext();
   const audioSource = audioContext.createBufferSource();
 
   // 解码音频文件为AudioBuffer对象
-  // audioContext.decodeAudioData(audioFiles['古典大钢琴.m4a'], function(buffer) {
-  //   // 将解码后的AudioBuffer对象设置给音频源节点
-  //   audioSource.buffer = buffer;
-  //   // 连接音频源节点到音频输出
-  //   audioSource.connect(audioContext.destination);
-  //   // 播放音频
-  //   audioSource.start();
-  // });
-
-  const startOffset = 4;
-  const endOffset = 8;
-  const duration = endOffset - startOffset;
-  const sampleRate = audioBuffer.sampleRate;
-  const startSample = startOffset * sampleRate;
-  const endSample = endOffset * sampleRate;
-  const numChannels = audioBuffer.numberOfChannels;
+  audioContext.decodeAudioData(audioFiles.grandPiano, function(audioBuffer) {
+    console.log('古典大钢琴解码成功');
+    const startOffset = 4;
+    const endOffset = 8;
+    const duration = endOffset - startOffset;
+    const sampleRate = audioBuffer.sampleRate;
+    const startSample = startOffset * sampleRate;
+    const endSample = endOffset * sampleRate;
+    const numChannels = audioBuffer.numberOfChannels;
 // 创建一个新的AudioBuffer来存储截取的音频数据
-  const slicedBuffer = audioContext.createBuffer(
-      numChannels,
-      endSample - startSample,
-      sampleRate
-  );
+    const slicedBuffer = audioContext.createBuffer(
+        numChannels,
+        endSample - startSample,
+        sampleRate
+    );
 // 复制截取的音频数据到新的AudioBuffer中
-  for (let channel = 0; channel < numChannels; channel++) {
-    const channelData = audioBuffer.getChannelData(channel);
-    const slicedChannelData = slicedBuffer.getChannelData(channel);
-    for (let i = startSample, j = 0; i < endSample; i++, j++) {
-      slicedChannelData[j] = channelData[i];
+    for (let channel = 0; channel < numChannels; channel++) {
+      const channelData = audioBuffer.getChannelData(channel);
+      const slicedChannelData = slicedBuffer.getChannelData(channel);
+      for (let i = startSample, j = 0; i < endSample; i++, j++) {
+        slicedChannelData[j] = channelData[i];
+      }
     }
-  }
 // 将截取的音频数据设置给音频源节点
-  audioSource.buffer = slicedBuffer;
+    audioSource.buffer = slicedBuffer;
 // 连接音频源节点到音频输出
-  audioSource.connect(audioContext.destination);
+    audioSource.connect(audioContext.destination);
 // 播放音频
-  audioSource.start();
+    audioSource.start();
+  }, function (err) {
+    console.log('古典大钢琴解码失败');
+    console.log(err);
+  });
+
+
 }
 
 
