@@ -242,12 +242,22 @@ export default {
           {
             name: 'Bright Flute NoteExp',
             software: cubase,
-            describe: '不错的笛子'
+            describe: '不错的笛子，就是不支持颤音'
           },
           {
             name: 'piccolo',
             software: cubase,
             describe: '短笛  音高'
+          },
+          {
+            name: 'Ethnic Flute',
+            software: cubase,
+            describe: '竹笛'
+          },
+          {
+            name: 'Drawbar Flutes',
+            software: cubase,
+            describe: '笛子的背景音，可以用来叠音色增强'
           },
           {
             name: 'oboe',
