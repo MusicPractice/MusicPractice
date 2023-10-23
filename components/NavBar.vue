@@ -7,13 +7,15 @@
     <NuxtLink to="/piano">键盘弹钢琴</NuxtLink>
     <NuxtLink to="/works">个人音乐作品</NuxtLink>
     <NuxtLink to="/uppers">音乐区UP主推荐</NuxtLink>
+    <NuxtLink to="/timbre">音色收集</NuxtLink>
 
     <div class="bottom-wrapper">
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>
       <p>站长油箱：littlefean at bitmountain dot top</p>
       <a href="https://beian.miit.gov.cn/" target="_blank">冀ICP备2022004336号-3</a>
       <br>
-      <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13010202003473" target="_blank">冀公安网备 13010202003473</a>
+      <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13010202003473" target="_blank">冀公安网备
+        13010202003473</a>
     </div>
   </div>
 </template>
@@ -28,7 +30,7 @@
   align-items: center;
   position: relative;
 
-  & > a {
+  &>a {
     color: #fff;
     font-size: 110%;
     width: 100%;
@@ -61,7 +63,7 @@
       line-height: 1.5em;
     }
 
-    & > a {
+    &>a {
       color: gray;
       text-decoration: none;
       line-height: 1.5em;
