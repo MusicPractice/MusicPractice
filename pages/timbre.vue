@@ -138,6 +138,21 @@ export default {
         ],
         vocal: [
           {
+            name: '声乐/女声合唱乐句变形/人声拨弹',
+            software: kuYueDui,
+            describe: '效果不错',
+          },
+          {
+            name: '声乐/炼金术士合唱',
+            software: kuYueDui,
+            describe: '非常神圣，但调不太容易搭配',
+          },
+          {
+            name: '声乐/深沉和声波形/金属泛音',
+            software: kuYueDui,
+            describe: '像粘粘世界里的神圣感',
+          },
+          {
             name: 'Heavenly Voices',
             software: cubase,
             describe: ''
@@ -235,6 +250,11 @@ export default {
         ],
         woodwind: [
           {
+            name: '主音/现代节奏布鲁斯主音',
+            software: kuYueDui,
+            describe: '电子合成器像笛子，适合悲怆'
+          },
+          {
             name: 'Recorder',
             software: cubase,
             describe: '适合solo'
@@ -297,6 +317,11 @@ export default {
         ],
         brass: [
           // 铜管
+          {
+            name: '背景音/模拟丝滑',
+            software: kuYueDui,
+            describe: '相当于是把铜管电音化了，还不错'
+          },
           {
             name: 'trumpet',
             software: cubase,
@@ -396,6 +421,21 @@ export default {
         ],
         specialEffect: [
           {
+            name: '声音效果/巨大震撼',
+            software: kuYueDui,
+            describe: '非常震撼的打击声音'
+          },
+          {
+            name: '声音效果/机械提升器',
+            software: kuYueDui,
+            describe: '情绪提升暂停的时候插入不错'
+          },
+          {
+            name: '声音效果/漩涡提升器/圆号提升器',
+            software: kuYueDui,
+            describe: '高音部分长按会有海豚音的震撼效果'
+          },
+          {
             name: 'Cymbal',
             software: cubase,
             describe: '爆发前的吸一口气 C3'
@@ -427,6 +467,21 @@ export default {
           },
         ],
         bass: [
+          {
+            name: '低音/怒放低音',
+            software: kuYueDui,
+            describe: '很牛的Bass，还有汽车人的声音'
+          },
+          {
+            name: '低音/巨大合成低音',
+            software: kuYueDui,
+            describe: '超级bass'
+          },
+          {
+            name: '低音/暗流/锐舞客',
+            software: kuYueDui,
+            describe: '超级帅的Bass'
+          },
           {
             name: 'Voyager Bass',
             software: cubase,
@@ -461,6 +516,21 @@ export default {
 
         ],
         electronic: [
+          {
+            name: '合成器/南极阳光',
+            software: kuYueDui,
+            describe: '超级温柔',
+          },
+          {
+            name: '键盘？/小旋风',
+            software: kuYueDui,
+            describe: '比较软萌萌可爱的电子感',
+          },
+          {
+            name: '合成器/明亮增音合成器',
+            software: kuYueDui,
+            describe: '帅帅的电音',
+          },
           {
             name: 'Sour Wine',
             software: cubase,
@@ -588,6 +658,36 @@ export default {
           },
         ],
         background: [
+          {
+            name: '音景/加速粒子',
+            software: kuYueDui,
+            describe: '宇宙感觉'
+          },
+          {
+            name: '音景/氛围感漂移',
+            software: kuYueDui,
+            describe: '很柔和，像minecraft'
+          },
+          {
+            name: '音景/氛围感吉他',
+            software: kuYueDui,
+            describe: '神韵'
+          },
+          {
+            name: '音景/水产业',
+            software: kuYueDui,
+            describe: '地狱边境-> 温暖扫弦'
+          },
+          {
+            name: '音景/陆内日落',
+            software: kuYueDui,
+            describe: '巨大苍凉悲伤感'
+          },
+          {
+            name: '音景/天文学家',
+            software: kuYueDui,
+            describe: '宇宙巨大空间感'
+          },
           {
             name: 'Ring House',
             software: cubase,
