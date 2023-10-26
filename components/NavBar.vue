@@ -9,6 +9,7 @@
     <NuxtLink to="/uppers">音乐区UP主推荐</NuxtLink>
     <NuxtLink to="/timbre">音色收集</NuxtLink>
     <NuxtLink to="/chord">和弦与和弦进行</NuxtLink>
+    <NuxtLink to="/about">关于作者</NuxtLink>
 
     <div class="bottom-wrapper">
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>

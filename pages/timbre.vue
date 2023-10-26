@@ -352,7 +352,6 @@ export default {
             software: cubase2,
             describe: '相比上一个单调一些'
           },
-
           {
             name: 'Dark Pad',
             software: cubase2,
