@@ -16,6 +16,9 @@
 console.log('index...');
 const { data } = await useFetch('/api/hello');
 console.log(data);
+
+document.title = '个人音乐作品展';
+
 // export default {
 //   components: {ContentPage}
 // }

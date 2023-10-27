@@ -1,6 +1,6 @@
 <template>
   <div class="NavBar">
-    <h1>音乐训练</h1>
+    <h1>个人音乐作品展</h1>
     <NuxtLink to="/">首页</NuxtLink>
     <NuxtLink to="/sheetMusicPractice">五线谱练习</NuxtLink>
     <NuxtLink to="/listeningExercise">听力训练</NuxtLink>

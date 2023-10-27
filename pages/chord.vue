@@ -1,22 +1,5 @@
 <template>
   <div class="Chord">
-    <!-- <h1>和弦总结</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>英文名</th>
-          <th>中文名</th>
-          <th>听感</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="chord in chords" :key="chord.id">
-          <td>{{ chord.englishName }}</td>
-          <td>{{ chord.chineseName }}</td>
-          <td>{{ chord.feel }}</td>
-        </tr>
-      </tbody>
-    </table> -->
     <h1>和弦进行</h1>
     <h2>大调系列</h2>
     <ul>
