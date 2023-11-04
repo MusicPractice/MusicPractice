@@ -34,6 +34,12 @@
 </template>
 
 <script lang="ts">
+useSeoMeta({
+  title: '个人音乐作品展 | 扒谱学习',
+  description: '学习乐理，分享音乐作品和音乐区up主',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, 扒谱, 游戏音乐, 奥拉星',
+});
+
 const majorScale = "大调";
 const minorScale = "小调";
 const fourFourTime = "4/4";

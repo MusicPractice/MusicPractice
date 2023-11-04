@@ -136,7 +136,6 @@
     <ul>
       <li>卡农进行：C-G-Am-Em-F-C-F-G（15634145）（15634125也可）</li>
       <li>卡农变体：17654321、或者17654325</li>
-      <!-- <li>平凡之路：G-Am-Bm-C-D-Em（G大调）===>转C后是：C-Dm-Em-F-G-Em（123453）</li> -->
       <li>经典流行：4536251：经典流行歌曲的和弦进行（稍微有点伤感）</li>
       <li>经典流行变体：4436251</li>
     </ul>
@@ -161,6 +160,11 @@
 </template>
 
 <script>
+useSeoMeta({
+  title: '个人音乐作品展 | 和弦笔记',
+  description: '学习各种和弦的笔记, 以及各种和弦进行',
+  keywords: '音乐, 和弦, 和弦进行, 乐理, 大调, 小调, 流行音乐',
+});
 export default {
   data() {
     return {
@@ -169,7 +173,12 @@ export default {
         { id: 2, englishName: "Minor", chineseName: "小三和弦", feel: "阴冷/悲伤" },
         { id: 3, englishName: "D7", chineseName: "D7", feel: "有张力" }
         // 添加更多和弦数据
-      ]
+      ],
+      meta: {
+        hid: 'hid',
+        name: 'description',
+        content: '关于我们页面的描述'
+      }
     };
   }
 };

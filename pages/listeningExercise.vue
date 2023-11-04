@@ -10,6 +10,11 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: '个人音乐作品展 | 听力测试',
+  description: '学习乐理、听力测试小工具',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, littlefean, 小梵, 小梵littlefean, 网易音乐人小梵, 阿岳, __阿岳__, 阿岳同学',
+});
 
 // 创建 AudioContext 对象
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();

@@ -17,7 +17,11 @@
 </template>
 
 <script>
-
+useSeoMeta({
+  title: '个人音乐作品展 | 作者信息',
+  description: '学习乐理，分享音乐作品和音乐区up主',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, littlefean, 小梵, 小梵littlefean, 网易音乐人小梵, 阿岳, __阿岳__, 阿岳同学',
+});
 </script>
 
 <style lang="scss">

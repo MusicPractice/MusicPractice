@@ -1,4 +1,10 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: '个人音乐作品展 | 钢琴弹奏',
+  description: '学习乐理，分享音乐作品和音乐区up主',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记',
+});
+
 const keybind = ref<"genshin">("genshin");
 const keysGenshin = ref<string[][]>([
   ["Q", "W", "E", "R", "T", "Y", "U"],

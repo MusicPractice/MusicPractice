@@ -27,6 +27,12 @@
 </template>
 
 <script lang="ts">
+useSeoMeta({
+  title: '个人音乐作品展 | 音色收集',
+  description: '学习乐理，分享音乐作品和音乐区up主',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, Cubase, 库乐队, FLStudio',
+});
+
 export default {
   methods: {
     handleClickTimbres(name: string) {

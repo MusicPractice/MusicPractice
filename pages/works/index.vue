@@ -10,6 +10,12 @@
 </template>
 
 <script>
+useSeoMeta({
+  title: '个人音乐作品展 | 个人音乐作品',
+  description: '学习乐理，分享音乐作品和音乐区up主',
+  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记',
+});
+
 export default {
   data() {
     return {
