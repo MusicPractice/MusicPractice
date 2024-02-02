@@ -17,5 +17,5 @@ export default defineEventHandler(async (event) => {
     }
   );
   const token = (await resp.formData()).get("access_token")?.toString();
-  return token;
+  await sendRedirect(event, `/authCallback?token=${token}`, 302);
 });

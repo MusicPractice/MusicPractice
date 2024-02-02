@@ -20,5 +20,9 @@
     "normalize.css": "^8.0.1",
     "nuxt": "^3.6.5",
     "sass": "^1.65.1"
+  },
+  "dependencies": {
+    "@vueuse/nuxt": "^10.7.2",
+    "octokit": "^3.1.2"
   }
 }

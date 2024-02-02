@@ -13,11 +13,6 @@
     <NuxtLink to="/about">关于作者</NuxtLink>
 
     <div class="bottom-wrapper">
-      <a
-        href="https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1"
-      >
-        登录
-      </a>
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>
       <p>站长油箱：littlefean at bitmountain dot top</p>
       <a href="https://beian.miit.gov.cn/" target="_blank"
