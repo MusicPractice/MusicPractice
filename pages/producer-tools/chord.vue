@@ -3,98 +3,98 @@
     <h1>和弦</h1>
     <table>
       <thead>
-        <tr>
-          <th></th>
-          <th>Maj</th>
-          <th>Min</th>
-          <th>Dim</th>
-          <th>Aug</th>
-          <th>Sus2</th>
-          <th>Sus4</th>
-          <th>5</th>
-        </tr>
+      <tr>
+        <th></th>
+        <th>Maj</th>
+        <th>Min</th>
+        <th>Dim</th>
+        <th>Aug</th>
+        <th>Sus2</th>
+        <th>Sus4</th>
+        <th>5</th>
+      </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>--</td>
-          <td>开心/终止</td>
-          <td>伤心/暗淡</td>
-          <td>紧张</td>
-          <td>惊悚/悬疑</td>
-          <td>悠闲/甜蜜</td>
-          <td>深情/飞扬/终止前</td>
-          <td>禅意</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td>梅花感</td>
-          <td>害怕</td>
-          <td>更紧张</td>
-          <td>-</td>
-          <td>增添丝力量</td>
-          <td>抑制飞扬增加沉稳</td>
-          <td>明亮感</td>
-        </tr>
-        <tr>
-          <td>7</td>
-          <td>紧绷感</td>
-          <td>淡化伤心</td>
-          <td>空灵紧张</td>
-          <td>流行感悬疑</td>
-          <td>略紧张害怕</td>
-          <td>减缓飞扬增加明亮</td>
-          <td>不协和</td>
-        </tr>
-        <tr>
-          <td>Maj7</td>
-          <td>空灵感</td>
-          <td>焦虑</td>
-          <td>-</td>
-          <td>终止感悬疑</td>
-          <td>深情饱满甜蜜</td>
-          <td>更沉稳的终止前</td>
-          <td>空灵感</td>
-        </tr>
-        <tr>
-          <td>add9</td>
-          <td>华语流行感</td>
-          <td>梦幻悲伤</td>
-          <td>极其惊吓</td>
-          <td>悬疑</td>
-          <td>温馨安逸感</td>
-          <td>增加一点流行感</td>
-          <td>禅意流</td>
-        </tr>
-        <tr>
-          <td>9</td>
-          <td>焦虑感</td>
-          <td>缓解悲伤</td>
-          <td>非常害怕</td>
-          <td>悬疑</td>
-          <td>小紧张悲伤</td>
-          <td>更加亮耳</td>
-          <td>撞音明亮</td>
-        </tr>
-        <tr>
-          <td>11</td>
-          <td>冷酷感</td>
-          <td @click="login">看开了</td>
-          <td>有点害怕</td>
-          <td>悬疑</td>
-          <td>小励志/终止感</td>
-          <td>更加饱满</td>
-          <td>撞音明亮</td>
-        </tr>
-        <tr>
-          <td>13</td>
-          <td>惊悚感</td>
-          <td @click="exit">不安</td>
-          <td>比较害怕</td>
-          <td>撞音悬疑</td>
-          <td>涟漪感离别</td>
-          <td>更加涟漪感</td>
-          <td>幽怨感</td>
-        </tr>
+      <tr>
+        <td>--</td>
+        <td>开心/终止</td>
+        <td>伤心/暗淡</td>
+        <td>紧张</td>
+        <td>惊悚/悬疑</td>
+        <td>悠闲/甜蜜</td>
+        <td>深情/飞扬/终止前</td>
+        <td>禅意</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>梅花感</td>
+        <td>害怕</td>
+        <td>更紧张</td>
+        <td>-</td>
+        <td>增添丝力量</td>
+        <td>抑制飞扬增加沉稳</td>
+        <td>明亮感</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>紧绷感</td>
+        <td>淡化伤心</td>
+        <td>空灵紧张</td>
+        <td>流行感悬疑</td>
+        <td>略紧张害怕</td>
+        <td>减缓飞扬增加明亮</td>
+        <td>不协和</td>
+      </tr>
+      <tr>
+        <td>Maj7</td>
+        <td>空灵感</td>
+        <td>焦虑</td>
+        <td>-</td>
+        <td>终止感悬疑</td>
+        <td>深情饱满甜蜜</td>
+        <td>更沉稳的终止前</td>
+        <td>空灵感</td>
+      </tr>
+      <tr>
+        <td>add9</td>
+        <td>华语流行感</td>
+        <td>梦幻悲伤</td>
+        <td>极其惊吓</td>
+        <td>悬疑</td>
+        <td>温馨安逸感</td>
+        <td>增加一点流行感</td>
+        <td>禅意流</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>焦虑感</td>
+        <td>缓解悲伤</td>
+        <td>非常害怕</td>
+        <td>悬疑</td>
+        <td>小紧张悲伤</td>
+        <td>更加亮耳</td>
+        <td>撞音明亮</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>冷酷感</td>
+        <td @click="login">看开了</td>
+        <td>有点害怕</td>
+        <td>悬疑</td>
+        <td>小励志/终止感</td>
+        <td>更加饱满</td>
+        <td>撞音明亮</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>惊悚感</td>
+        <td @click="exit">不安</td>
+        <td>比较害怕</td>
+        <td>撞音悬疑</td>
+        <td>涟漪感离别</td>
+        <td>更加涟漪感</td>
+        <td>幽怨感</td>
+      </tr>
       </tbody>
     </table>
     <h1>和弦进行</h1>
@@ -207,7 +207,7 @@ export default {
           chineseName: "小三和弦",
           feel: "阴冷/悲伤",
         },
-        { id: 3, englishName: "D7", chineseName: "D7", feel: "有张力" },
+        {id: 3, englishName: "D7", chineseName: "D7", feel: "有张力"},
         // 添加更多和弦数据
       ],
       meta: {
@@ -220,7 +220,7 @@ export default {
   methods: {
     login() {
       window.location.href =
-        "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
+          "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
     },
     exit() {
       localStorage.removeItem("token");
@@ -238,23 +238,12 @@ export default {
 
   h1 {
     text-align: center;
+    font-size: 30px;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-
-    th,
-    td {
-      // border: 1px solid whitesmoke;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background-color: black;
-    }
+  h2 {
+    font-size: 25px;
+    line-height: 2em;
   }
 
   li {

@@ -2,24 +2,31 @@
   <div class="Timbre">
     <h1>音色收集</h1>
     <div class="buttonArea">
-      <button v-for="(key, i) in Object.keys(timbres)" :key="i" @click="handleClickTimbres(key)">{{ key }}</button>
+      <button
+          v-for="(key, i) in Object.keys(timbres)"
+          :key="i"
+          class="ring rounded px-1 ring-orange-800"
+          @click="handleClickTimbres(key)">
+
+        {{ key }}
+      </button>
     </div>
     <div class="kindArea">
       <h2>{{ currentSelectTimbres }}</h2>
       <table>
         <thead>
-          <tr>
-            <th>软件</th>
-            <th>名称</th>
-            <th>描述</th>
-          </tr>
+        <tr>
+          <th>软件</th>
+          <th>名称</th>
+          <th>描述</th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, idx) in timbres[currentSelectTimbres]" :key="idx">
-            <td>{{ item.software }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.describe }}</td>
-          </tr>
+        <tr v-for="(item, idx) in timbres[currentSelectTimbres]" :key="idx">
+          <td>{{ item.software }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.describe }}</td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -855,29 +862,6 @@ export default {
   .kindArea {
     width: 90%;
     margin: 0 auto;
-
-    h2 {
-      color: skyblue;
-    }
-
-    table {
-      width: 100%;
-      line-height: 1.5em;
-
-      thead {
-        text-align: left;
-        background-color: #1e1e1e;
-        color: white;
-      }
-
-      tbody {
-        tr:nth-child(even) {
-          background-color: #2b2b2b;
-        }
-      }
-
-      tr {}
-    }
   }
 
 

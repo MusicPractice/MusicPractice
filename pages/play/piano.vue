@@ -32,7 +32,7 @@ async function loadAudioFiles() {
     return ab;
   }
 
-  const audioUrl = (await import("@/assets/audio/古典大钢琴.mp3")).default;
+  const audioUrl = (await import("assets/audio/古典大钢琴.mp3")).default;
   const arrayBuffer = await _loadAudioFile(audioUrl);
   const audioContext = new AudioContext();
   const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);

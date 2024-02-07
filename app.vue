@@ -1,6 +1,6 @@
 <template>
-  <NavBar />
-  <NuxtPage />
+  <NavBar/>
+  <NuxtPage class="bg-stone-200 text-stone-800"/>
 </template>
 
 <script lang="ts" setup>
@@ -8,8 +8,8 @@ const router = useRouter();
 const token = useLocalStorage("token", "");
 
 if (
-  router.currentRoute.value.path.startsWith("/_inside") &&
-  !token.value.startsWith("gh")
+    router.currentRoute.value.path.startsWith("/_inside") &&
+    !token.value.startsWith("gh")
 ) {
   router.push("/");
 }
@@ -35,11 +35,35 @@ router.beforeEach((to, from, next) => {
 
   > :last-child {
     flex: 1;
-    background-color: #313338;
   }
 }
+
 * {
-  color-scheme: dark;
   font-family: -apple-system, system-ui, sans-serif;
+
+  &::selection {
+    background-color: #c5a381;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th,
+  td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #c5a381;
+  }
+  tr {
+    &:nth-child(odd) {
+      background-color: #dcd8d8;
+    }
+  }
 }
 </style>

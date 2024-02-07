@@ -1,18 +1,29 @@
 <template>
   <div class="uppers">
     <h1>
-      <NuxtLink to="/">返回</NuxtLink>
+      <NuxtLink to="/" class="text-orange-600">返回</NuxtLink>
       音乐区UP主推荐
     </h1>
-    <div class="ups">
-      <NuxtLink v-for="up in ups" :to="up.link" target="_blank">
-        <h3>{{ up.title }}</h3>
-        <p v-if="up.tool">软件使用：{{ up.tool }}</p>
-        <p v-if="up.tag">标签：{{ up.tag }}</p>
-        <p class="male" v-if="up.gender">♂</p>
-        <p class="female" v-else>♀</p>
-      </NuxtLink>
-    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>up名称</th>
+        <th>软件使用</th>
+        <th>标签</th>
+        <th>性别</th>
+        <th>链接</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="up in ups" :key="up.title">
+        <td>{{ up.title }}</td>
+        <td>{{ up.tool }}</td>
+        <td>{{ up.tag }}</td>
+        <td>{{ up.gender ? '♂' : '♀' }}</td>
+        <td>{{ up.link}}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -35,7 +46,6 @@ useSeoMeta({
     margin-bottom: 3rem;
 
     a {
-      color: #3ec1e2;
       text-decoration: none;
     }
   }
@@ -49,15 +59,17 @@ useSeoMeta({
     a {
       width: 17rem;
       height: 8rem;
-      background-color: #222;
       border-radius: 1rem;
-      color: #fff;
       text-decoration: none;
       transition: all 0.3s;
       margin-bottom: 0.5rem;
 
       p {
         line-height: 0.5rem;
+      }
+
+      .male, .female {
+        background-color: gray;
       }
 
       .male {
@@ -68,9 +80,6 @@ useSeoMeta({
         color: hotpink;
       }
 
-      &:hover {
-        background-color: #333;
-      }
     }
   }
 }
