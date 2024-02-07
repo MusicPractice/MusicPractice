@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '个人音乐作品展 | 钢琴弹奏',
-  description: '学习乐理，分享音乐作品和音乐区up主',
-  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记',
+  title: "个人音乐作品展 | 钢琴弹奏",
+  description: "学习乐理，分享音乐作品和音乐区up主",
+  keywords: "乐理学习, 音乐作品, 音乐区up主, 乐理笔记",
 });
 
 const keybind = ref<"genshin">("genshin");
@@ -20,82 +20,70 @@ const classesGenshin = ref<Record<string, string[]>>({
 const pressedKeys = ref<string[]>([]);
 
 // 在页面加载时预先加载音频文件
-const audioFiles = {};
+const audioFiles: {
+  grandPiano?: AudioBuffer;
+} = {};
 
 // 在loadAudioFiles函数中使用loadAudioFile方法来加载音频文件
-function loadAudioFiles(): Promise<void> {
-  const audioUrl = '/audio/古典大钢琴.m4a';
+async function loadAudioFiles() {
+  async function _loadAudioFile(url: string): Promise<ArrayBuffer> {
+    const resp = await fetch(url);
+    const ab = await resp.arrayBuffer();
+    return ab;
+  }
 
-  return loadAudioFile(audioUrl)
-      .then((arrayBuffer) => {
-        const audioContext = new AudioContext();
-        return audioContext.decodeAudioData(arrayBuffer);
-      })
-      .then((audioBuffer) => {
-        audioFiles.grandPiano = audioBuffer;
-      });
+  const audioUrl = (await import("@/assets/audio/古典大钢琴.mp3")).default;
+  const arrayBuffer = await _loadAudioFile(audioUrl);
+  const audioContext = new AudioContext();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  audioFiles.grandPiano = audioBuffer;
 }
 
-function loadAudioFile(url: string): Promise<ArrayBuffer> {
-  return new Promise((resolve, reject) => {
-    fetch(url)
-        .then((response) => response.arrayBuffer())
-        .then((arrayBuffer) => resolve(arrayBuffer))
-        .catch((error) => reject(error));
-  });
-}
 /**
  * 播放音效函数
  */
-function playNote(): void {
+async function playNote(start: number): Promise<void> {
   const audioContext = new AudioContext();
   const audioSource = audioContext.createBufferSource();
 
-  // 解码音频文件为AudioBuffer对象
-  audioContext.decodeAudioData(audioFiles.grandPiano, function(audioBuffer) {
-    console.log('古典大钢琴解码成功');
-    const startOffset = 4;
-    const endOffset = 8;
-    const duration = endOffset - startOffset;
-    const sampleRate = audioBuffer.sampleRate;
-    const startSample = startOffset * sampleRate;
-    const endSample = endOffset * sampleRate;
-    const numChannels = audioBuffer.numberOfChannels;
-// 创建一个新的AudioBuffer来存储截取的音频数据
-    const slicedBuffer = audioContext.createBuffer(
-        numChannels,
-        endSample - startSample,
-        sampleRate
-    );
-// 复制截取的音频数据到新的AudioBuffer中
-    for (let channel = 0; channel < numChannels; channel++) {
-      const channelData = audioBuffer.getChannelData(channel);
-      const slicedChannelData = slicedBuffer.getChannelData(channel);
-      for (let i = startSample, j = 0; i < endSample; i++, j++) {
-        slicedChannelData[j] = channelData[i];
-      }
+  const startOffset = 4;
+  const endOffset = 8;
+  const duration = endOffset - startOffset;
+  const sampleRate = audioFiles.grandPiano?.sampleRate!;
+  const startSample = startOffset * sampleRate;
+  const endSample = endOffset * sampleRate;
+  const numChannels = audioFiles.grandPiano?.numberOfChannels!;
+  // 创建一个新的AudioBuffer来存储截取的音频数据
+  const slicedBuffer = audioContext.createBuffer(
+    Math.floor(numChannels),
+    Math.floor(endSample - startSample),
+    Math.floor(sampleRate)
+  );
+  // 复制截取的音频数据到新的AudioBuffer中
+  for (let channel = 0; channel < numChannels; channel++) {
+    const channelData = audioFiles.grandPiano?.getChannelData(channel)!;
+    const slicedChannelData = slicedBuffer.getChannelData(channel);
+    for (let i = startSample, j = 0; i < endSample; i++, j++) {
+      slicedChannelData[j] = channelData[i];
     }
-// 将截取的音频数据设置给音频源节点
-    audioSource.buffer = slicedBuffer;
-// 连接音频源节点到音频输出
-    audioSource.connect(audioContext.destination);
-// 播放音频
-    audioSource.start();
-  }, function (err) {
-    console.log('古典大钢琴解码失败');
-    console.log(err);
-  });
-
-
+  }
+  // 将截取的音频数据设置给音频源节点
+  audioSource.buffer = slicedBuffer;
+  // 连接音频源节点到音频输出
+  audioSource.connect(audioContext.destination);
+  // 播放音频
+  audioSource.start(start, 0, 4);
 }
-
 
 function handleKeydown(ev: KeyboardEvent) {
   if (pressedKeys.value?.includes(ev.key)) {
     return;
   }
+  if (!/^[a-z]$/.test(ev.key)) {
+    return;
+  }
   console.log(ev.key);
-  playNote();
+  playNote(16);
   pressedKeys.value?.push(ev.key);
   if (keybind.value === "genshin") {
     classesGenshin.value[ev.key.toUpperCase()].splice(
@@ -119,18 +107,12 @@ function handleKeyup(ev: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (process.client) {
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
     // 在页面加载时调用loadAudioFiles函数预先加载音频文件
-    loadAudioFiles()
-        .then(() => {
-          console.log('所有音色已经加载了');
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    await loadAudioFiles();
   }
 });
 
