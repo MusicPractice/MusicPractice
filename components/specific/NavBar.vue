@@ -3,7 +3,7 @@
 interface NavItem {
   to: string;
   title: string;
-  child?: NavItem[];
+  child?: NavItem[]
 }
 
 const links: Array<NavItem> = [

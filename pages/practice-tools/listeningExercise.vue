@@ -1,72 +1,93 @@
 <template>
-  <div class="listeningExercise">
-    <h1>听力练习</h1>
-    <h2>随机频率测试</h2>
-    <button @click="handleRandom">随机一个频率</button>
-    <button @click="handlePlay">点击发声</button>
-    <input type="number" v-model="guessValue">hz
-    <button @click="handleGuess">猜！</button>
+  <div class="listeningExercise p-6 leading-loose">
+    <h2 class="text-xl">随机频率测试</h2>
+    <p>
+      请打开声音，点击随机一个频率时，系统会生成一个随机频率的声音，范围在20~4000Hz内，然后点播放，播放完了之后再猜测，将你猜的是否准确</p>
+
+    <mp-button @click="handleRandom">随机一个频率</mp-button>
+    <mp-button class="" @click="handlePlay">再次播放</mp-button>
+    <template v-if="!isValid" >
+      <input type="number" placeholder="请输入整数" v-model.lazy="guessValue" :key="guessValue">
+      <span>Hz</span>
+    </template>
+    <mp-button v-if="!isValid" @click="handleGuess">猜！</mp-button>
+
+    <h3 class="text-lg">作答历史</h3>
+    <table>
+      <thead>
+      <tr>
+        <td>次数</td>
+        <td>答案</td>
+        <td>猜测</td>
+        <td>差距</td>
+        <td>结果</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item, i) in guessHistory" :key="i">
+        <td>{{ i + 1 }}</td>
+        <td>答案：{{ item.answer }}Hz</td>
+        <td>猜测：{{ item.guess }}Hz</td>
+        <td>差距：{{ Math.abs(item.answer - item.guess) }}Hz</td>
+        <td class="text-center"
+            :class="item.result ? 'bg-green-800 text-green-50' : 'bg-red-800 text-red-50'">
+          {{ item.result ? '正确' : '错误' }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <mp-button @click="clearHistory">清空历史</mp-button>
   </div>
 </template>
 
 <script setup lang="ts">
-useSeoMeta({
-  title: '个人音乐作品展 | 听力测试',
-  description: '学习乐理、听力测试小工具',
-  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, littlefean, 小梵, 小梵littlefean, 网易音乐人小梵, 阿岳, __阿岳__, 阿岳同学',
-});
 
-// 创建 AudioContext 对象
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+import MpButton from "~/components/common/mp-button.vue";
+import RandomFrequent from "~/services/randomFrequent";
+import {ref} from "vue";
 
-function playSound(frequency: number, duration: number): void {
-  // 创建 OscillatorNode
-  const oscillator = audioContext.createOscillator();
+let guessValue = ref('');
+let isValid = ref(false);
+const guessHistory = ref(RandomFrequent.history);
 
-  // 设置频率
-  oscillator.frequency.value = frequency;
-
-  // 将 OscillatorNode 连接到音频目标
-  oscillator.connect(audioContext.destination);
-
-  // 开始播放
-  oscillator.start(audioContext.currentTime);
-
-  // 停止播放
-  oscillator.stop(audioContext.currentTime + duration);
-}
-
-let randomFreq = Math.floor(80 + Math.random() * 1000);
-let guessValue = '';
 /**
  * 随机抽一个音
  */
 function handleRandom() {
-  // 80 ~ 1080
-  randomFreq = Math.floor(80 + Math.random() * 1000);
+  guessValue.value = '';
+  RandomFrequent.update();
+  isValid.value = RandomFrequent.isValid;
+  RandomFrequent.playSound();
 }
 
 function handlePlay() {
-  console.log(123);
-  // 以 440 Hz 频率播放声音，持续 2 秒钟
-  playSound(randomFreq, 0.5);
+  RandomFrequent.playSound();
+}
+
+function clearHistory() {
+  RandomFrequent.clearHistory();
+  guessHistory.value = [...RandomFrequent.history];
 }
 
 // 处理猜测按钮点击事件
 function handleGuess() {
-  if (guessValue === '') {
-    console.log('输入危空');
+  if (guessValue.value === '') {
+    alert('输入不能为空');
+    return;
   }
-  const guessFreq = parseInt(guessValue, 10);
+  const guessFreq = parseInt(guessValue.value, 10);
 
   if (isNaN(guessFreq)) {
     // 如果用户输入的不是有效的数字，则给出错误提示
-    console.log('请输入有效的频率值！');
+    alert('请输入有效的频率值！');
   } else {
-    if (guessFreq === randomFreq) {
+    const res = RandomFrequent.valid(guessFreq);
+    isValid.value = RandomFrequent.isValid;
+    guessHistory.value = [...RandomFrequent.history];
+    if (res) {
       alert('恭喜你，猜对了！');
     } else {
-      alert(`很遗憾，猜错了！答案是${randomFreq}`);
+      alert(`很遗憾，猜错了！答案是${RandomFrequent.freq}`);
     }
   }
 }

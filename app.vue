@@ -1,9 +1,13 @@
 <template>
+  <app-alert/>
   <NavBar/>
   <NuxtPage class="bg-stone-200 text-stone-800"/>
 </template>
 
 <script lang="ts" setup>
+import NavBar from "~/components/specific/NavBar.vue";
+import AppAlert from "~/components/specific/app-alert.vue";
+
 const router = useRouter();
 const token = useLocalStorage("token", "");
 
@@ -60,6 +64,7 @@ table {
   th {
     background-color: #c5a381;
   }
+
   tr {
     &:nth-child(odd) {
       background-color: #dcd8d8;
