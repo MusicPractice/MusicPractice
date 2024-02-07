@@ -1,17 +1,24 @@
+<script setup lang="ts">
+const links = [
+  { to: '/', title: '首页' },
+  { to: '/sheetMusicPractice', title: '五线谱练习' },
+  { to: '/listeningExercise', title: '听力训练' },
+  { to: '/piano', title: '键盘弹钢琴' },
+  { to: '/works', title: '个人音乐作品' },
+  { to: '/uppers', title: '音乐区UP主推荐' },
+  { to: '/timbre', title: '音色收集' },
+  { to: '/chord', title: '和弦与和弦进行' },
+  { to: '/transcribeMusic', title: '扒谱学习' },
+  { to: '/about', title: '关于作者' }
+]
+</script>
+
 <template>
   <div class="NavBar">
-    <h1>个人音乐作品展</h1>
-    <NuxtLink to="/">首页</NuxtLink>
-    <NuxtLink to="/sheetMusicPractice">五线谱练习</NuxtLink>
-    <NuxtLink to="/listeningExercise">听力训练</NuxtLink>
-    <NuxtLink to="/piano">键盘弹钢琴</NuxtLink>
-    <NuxtLink to="/works">个人音乐作品</NuxtLink>
-    <NuxtLink to="/uppers">音乐区UP主推荐</NuxtLink>
-    <NuxtLink to="/timbre">音色收集</NuxtLink>
-    <NuxtLink to="/chord">和弦与和弦进行</NuxtLink>
-    <NuxtLink to="/transcribeMusic">扒谱学习</NuxtLink>
-    <NuxtLink to="/about">关于作者</NuxtLink>
-
+    <h1 class="text-2xl my-2">个人音乐作品展</h1>
+    <template v-for="link in links" :key="link.to">
+      <nuxt-link :to="link.to" >{{ link.title }}</nuxt-link>
+    </template>
     <div class="bottom-wrapper">
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>
       <p>站长油箱：littlefean at bitmountain dot top</p>
@@ -33,7 +40,7 @@
   align-items: center;
   position: relative;
 
-  &>a {
+  & > a {
     color: #fff;
     font-size: 110%;
     width: 100%;
@@ -66,7 +73,7 @@
       line-height: 1.5em;
     }
 
-    &>a {
+    & > a {
       color: gray;
       text-decoration: none;
       line-height: 1.5em;
