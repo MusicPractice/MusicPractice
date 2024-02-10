@@ -55,7 +55,7 @@ const links: Array<NavItem> = [
 </script>
 
 <template>
-  <div class="w-48 bg-orange-300 flex flex-col shadow-2xl shadow-amber-100 relative">
+  <div class="w-48 bg-allogenes-dark flex flex-col shadow-inner shadow-allogenes-deep relative">
     <h1 class="text-2xl text-yellow-950 font-bold pl-2 py-4 mb-4">个人音乐小站</h1>
     <template v-for="link in links" :key="link.to">
       <section v-if="link.child"
@@ -77,7 +77,7 @@ const links: Array<NavItem> = [
     </template>
 
     <div
-        class="bg-gradient-to-b from-orange-300 to-amber-600 text-orange-50 absolute bottom-0 text-center p-2 text-xs leading-4">
+        class="bg-gradient-to-b from-allogenes-dark to-allogenes-deep text-wood-white absolute bottom-0 text-center p-2 text-xs leading-4">
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>
       <p>站长油箱：littlefean at bitmountain dot top</p>
       <a href="https://beian.miit.gov.cn/" target="_blank"

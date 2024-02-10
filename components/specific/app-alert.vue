@@ -3,14 +3,6 @@ import {ref} from 'vue';
 
 let showAlert = ref(false);
 let message = ref('');
-
-export function mpAlert(msg: string) {
-  message.value = msg;
-  showAlert.value = true;
-  setTimeout(() => {
-    showAlert.value = false;
-  }, 3000);
-}
 </script>
 
 <template>

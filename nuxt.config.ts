@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import path from "node:path";
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["normalize.css", '~/assets/css/tailwind.css'],
@@ -8,7 +10,9 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
+  alias: {
+    '@': path.resolve(__dirname),
+  },
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
