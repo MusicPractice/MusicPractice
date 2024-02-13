@@ -6,8 +6,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "test": "jest"
+    "postinstall": "nuxt prepare"
   },
   "config": {
     "nuxt": {
@@ -20,7 +19,6 @@
     "@types/howler": "^2.2.11",
     "@types/node": "^18.17.0",
     "autoprefixer": "^10.4.17",
-    "jest": "^29.7.0",
     "normalize.css": "^8.0.1",
     "nuxt": "^3.6.5",
     "postcss": "^8.4.34",

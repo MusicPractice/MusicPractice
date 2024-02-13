@@ -1,6 +1,6 @@
 <template>
-  <div class="About">
-    <h1>关于作者</h1>
+  <div class="About leading-loose p-4">
+    <h1 class="text-3xl">关于作者</h1>
     <main>
       <h2>网站开设</h2>
       <p>发现使用Cubase编曲时，还要低头看手写的笔记、使用ipad的库乐队进行编曲时，ipad里的笔记软件翻来翻去会比较麻烦</p>

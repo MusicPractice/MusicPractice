@@ -46,9 +46,9 @@ export default class Chord {
      * @param root {Note} 根音
      */
     constructor(root: Note, type: ChordType, extension: ChordExtension) {
+        this.root = root;
         this.type = type;
         this.extension = extension;
-        this.root = root;
     }
 
     /**
@@ -56,9 +56,6 @@ export default class Chord {
      * 例如返回 ['C', 'G'] 表示这个和弦的构成音既是C调调内音，也是G调调内音。
      */
     getScale(): string[] {
-        // 定义调内音的音名序列
-        const scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
         // 根据和弦的根音和类型，确定和弦所在的调内音
         const chordNotes = this.getNotes();
         const scales: string[][] = [];
@@ -142,6 +139,20 @@ export default class Chord {
         return res;
     }
 
+    /**
+     * 从和弦的字符串名字中解析出对象，目前仅支持三和弦
+     * @param name {string} 例如：'D#Maj'
+     */
+    static fromName(name: string): Chord {
+        const sliceIndex = name.includes("#") ? 2 : 1;
+        const baseNote: string = name.slice(0, sliceIndex);
+        const chordType: string = name.slice(sliceIndex, name.length);
+        return new Chord(
+            Note.fromNoteName(`${baseNote}3`),
+            ChordType[chordType],
+            ChordExtension.None,
+        )
+    }
     /**
      * 获取和弦名称
      * @returns {string} 和弦名称，例如 'D#Maj'

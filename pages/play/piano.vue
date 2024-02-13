@@ -1,16 +1,18 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: "个人音乐作品展 | 钢琴弹奏",
-  description: "学习乐理，分享音乐作品和音乐区up主",
-  keywords: "乐理学习, 音乐作品, 音乐区up主, 乐理笔记",
-});
 
-const keybind = ref<"genshin">("genshin");
+import PianoPlayer from "~/services/pianoPlayer";
+import Note from "~/services/note";
+import Chord from "~/services/chord";
+
+const keybind = ref<string>("genshin");
+
+// 用于渲染界面上的所有键盘
 const keysGenshin = ref<string[][]>([
   ["Q", "W", "E", "R", "T", "Y", "U"],
   ["A", "S", "D", "F", "G", "H", "J"],
   ["Z", "X", "C", "V", "B", "N", "M"],
 ]);
+
 // prettier-ignore
 const classesGenshin = ref<Record<string, string[]>>({
   Q: [], W: [], E: [], R: [], T: [], Y: [], U: [],
@@ -19,107 +21,108 @@ const classesGenshin = ref<Record<string, string[]>>({
 });
 const pressedKeys = ref<string[]>([]);
 
-// 在页面加载时预先加载音频文件
-const audioFiles: {
-  grandPiano?: AudioBuffer;
-} = {};
+// 按键到音符的映射表
+const keyToNote = ref<Record<string, Note>>({
+  // 第一行
+  "Q": Note.fromNoteName('C5'),
+  "W": Note.fromNoteName('D5'),
+  "E": Note.fromNoteName('E5'),
+  "R": Note.fromNoteName('F5'),
+  "T": Note.fromNoteName('G5'),
+  "Y": Note.fromNoteName('A5'),
+  "U": Note.fromNoteName('B5'),
+  // 第二行
+  "A": Note.fromNoteName('C4'),
+  "S": Note.fromNoteName('D4'),
+  "D": Note.fromNoteName('E4'),
+  "F": Note.fromNoteName('F4'),
+  "G": Note.fromNoteName('G4'),
+  "H": Note.fromNoteName('A4'),
+  "J": Note.fromNoteName('B4'),
+  // 第三行
+  "Z": Note.fromNoteName('C3'),
+  "X": Note.fromNoteName('D3'),
+  "C": Note.fromNoteName('E3'),
+  "V": Note.fromNoteName('F3'),
+  "B": Note.fromNoteName('G3'),
+  "N": Note.fromNoteName('A3'),
+  "M": Note.fromNoteName('B3'),
+});
 
-// 在loadAudioFiles函数中使用loadAudioFile方法来加载音频文件
-async function loadAudioFiles() {
-  async function _loadAudioFile(url: string): Promise<ArrayBuffer> {
-    const resp = await fetch(url);
-    const ab = await resp.arrayBuffer();
-    return ab;
-  }
-
-  const audioUrl = (await import("assets/audio/古典大钢琴.mp3")).default;
-  const arrayBuffer = await _loadAudioFile(audioUrl);
-  const audioContext = new AudioContext();
-  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-  audioFiles.grandPiano = audioBuffer;
-}
-
-/**
- * 播放音效函数
- */
-async function playNote(start: number): Promise<void> {
-  const audioContext = new AudioContext();
-  const audioSource = audioContext.createBufferSource();
-
-  const startOffset = 4;
-  const endOffset = 8;
-  const duration = endOffset - startOffset;
-  const sampleRate = audioFiles.grandPiano?.sampleRate!;
-  const startSample = startOffset * sampleRate;
-  const endSample = endOffset * sampleRate;
-  const numChannels = audioFiles.grandPiano?.numberOfChannels!;
-  // 创建一个新的AudioBuffer来存储截取的音频数据
-  const slicedBuffer = audioContext.createBuffer(
-    Math.floor(numChannels),
-    Math.floor(endSample - startSample),
-    Math.floor(sampleRate)
-  );
-  // 复制截取的音频数据到新的AudioBuffer中
-  for (let channel = 0; channel < numChannels; channel++) {
-    const channelData = audioFiles.grandPiano?.getChannelData(channel)!;
-    const slicedChannelData = slicedBuffer.getChannelData(channel);
-    for (let i = startSample, j = 0; i < endSample; i++, j++) {
-      slicedChannelData[j] = channelData[i];
-    }
-  }
-  // 将截取的音频数据设置给音频源节点
-  audioSource.buffer = slicedBuffer;
-  // 连接音频源节点到音频输出
-  audioSource.connect(audioContext.destination);
-  // 播放音频
-  audioSource.start(start, 0, 4);
-}
+// 按键到和弦的映射
+const keyToChord = ref({
+  "1": Chord.fromName('CMaj'),
+  "2": Chord.fromName('DMin'),
+  "3": Chord.fromName('EMin'),
+  "4": Chord.fromName('FMaj'),
+  "5": Chord.fromName('GMaj'),
+  "6": Chord.fromName('AMin'),
+  "7": Chord.fromName('BDim'),
+})
 
 function handleKeydown(ev: KeyboardEvent) {
   if (pressedKeys.value?.includes(ev.key)) {
     return;
   }
-  if (!/^[a-z]$/.test(ev.key)) {
+  if (!/^[a-z]|[1-9]$/.test(ev.key)) {
     return;
   }
-  console.log(ev.key);
-  playNote(16);
+  if (/^[a-z]$/.test(ev.key)) {
+    // 字母
+    PianoPlayer.playNote(keyToNote.value[ev.key.toUpperCase()]);
+  } else {
+    // 和弦
+    PianoPlayer.playChord(keyToChord.value[ev.key], true);
+  }
+
+
   pressedKeys.value?.push(ev.key);
   if (keybind.value === "genshin") {
-    classesGenshin.value[ev.key.toUpperCase()].splice(
-      classesGenshin.value[ev.key.toUpperCase()].indexOf("animate"),
-      1
-    );
-    classesGenshin.value[ev.key.toUpperCase()].push("pressed");
-    setTimeout(() => {
-      classesGenshin.value[ev.key.toUpperCase()].push("animate");
-    }, 0);
+    // 字母
+    if (/^[a-z]$/.test(ev.key)) {
+      classesGenshin.value[ev.key.toUpperCase()].splice(
+          classesGenshin.value[ev.key.toUpperCase()].indexOf("animate"),
+          1
+      );
+      classesGenshin.value[ev.key.toUpperCase()].push("pressed");
+      setTimeout(() => {
+        classesGenshin.value[ev.key.toUpperCase()].push("animate");
+      }, 0);
+    } else {
+      const pressChord: Chord = keyToChord.value[ev.key];
+      console.log()
+    }
   }
 }
 
 function handleKeyup(ev: KeyboardEvent) {
+  if (!/^[a-z]|[1-9]$/.test(ev.key)) {
+    return;
+  }
   pressedKeys.value?.splice(pressedKeys.value.indexOf(ev.key), 1);
   if (keybind.value === "genshin") {
-    classesGenshin.value[ev.key.toUpperCase()].splice(
-      classesGenshin.value[ev.key.toUpperCase()].indexOf("pressed"),
-      1
-    );
+
+    if (/^[a-z]$/.test(ev.key)) {
+      classesGenshin.value[ev.key.toUpperCase()].splice(
+          classesGenshin.value[ev.key.toUpperCase()].indexOf("pressed"),
+          1
+      );
+    }
+
   }
 }
 
 onMounted(async () => {
   if (process.client) {
-    window.addEventListener("keydown", handleKeydown);
-    window.addEventListener("keyup", handleKeyup);
-    // 在页面加载时调用loadAudioFiles函数预先加载音频文件
-    await loadAudioFiles();
+    document.addEventListener("keydown", handleKeydown);
+    document.addEventListener("keyup", handleKeyup);
   }
 });
 
 onUnmounted(() => {
   if (process.client) {
-    window.removeEventListener("keydown", handleKeydown);
-    window.removeEventListener("keyup", handleKeyup);
+    document.removeEventListener("keydown", handleKeydown);
+    document.removeEventListener("keyup", handleKeyup);
   }
 });
 </script>

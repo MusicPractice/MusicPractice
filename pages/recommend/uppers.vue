@@ -20,20 +20,15 @@
         <td>{{ up.tool }}</td>
         <td>{{ up.tag }}</td>
         <td>{{ up.gender ? '♂' : '♀' }}</td>
-        <td>{{ up.link}}</td>
+        <td>{{ up.link }}</td>
       </tr>
       </tbody>
     </table>
   </div>
 </template>
 
-<script lang="ts">
-useSeoMeta({
-  title: '个人音乐作品展 | 音乐区up主推荐',
-  description: '学习乐理，分享音乐作品和音乐区up主',
-  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记',
-});
-
+<script lang="ts" setup>
+import ups from "~/utils/ups";
 </script>
 
 <style scoped lang="scss">

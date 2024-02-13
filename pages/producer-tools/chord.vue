@@ -1,5 +1,7 @@
 <template>
   <div class="Chord">
+    <p>请先点击加载音源，然后再点播放才能试听</p>
+    <button class="ring p-2 m-2 rounded" @click="handleClickLoad">加载音源</button>
     <h1>和弦表</h1>
     <table>
       <thead>
@@ -125,8 +127,7 @@
     </template>
 
     <h1>三和弦试听</h1>
-    <p>请先点击加载音源，然后再点播放才能试听</p>
-    <button class="ring p-2 m-2 rounded" @click="handleClickLoad">加载音源</button>
+
     <!--<button class="ring p-2 m-2 rounded" @click="handleClickChord">播放</button>-->
     <div>
       <span>高亮</span>
@@ -320,11 +321,6 @@ const isAddBass = ref<boolean>(false);
 async function handleClickLoad() {
   await PianoPlayer.loadAudio('default');
   alert('加载完毕');
-}
-
-function handleClickChord() {
-  const C = new Chord(new Note(3, 1), ChordType.Maj, ChordExtension.None);
-  PianoPlayer.playChord(C, false);
 }
 
 /**

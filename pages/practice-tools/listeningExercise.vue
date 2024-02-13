@@ -36,7 +36,7 @@
       </tr>
       </tbody>
     </table>
-    <mp-button @click="clearHistory">清空历史</mp-button>
+    <MpButton @click="clearHistory">清空历史</MpButton>
   </div>
 </template>
 
@@ -44,7 +44,6 @@
 
 import MpButton from "~/components/common/mp-button.vue";
 import RandomFrequent from "~/services/randomFrequent";
-import {ref} from "vue";
 
 let guessValue = ref('');
 let isValid = ref(false);
