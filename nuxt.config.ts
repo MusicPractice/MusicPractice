@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     '@': path.resolve(__dirname),
   },
   router: {
-    extendRoutes(routes, resolve) {
+    extendRoutes(routes, resolve): void {
       routes.push({
         name: 'works-id',
         path: '/works/:id/',

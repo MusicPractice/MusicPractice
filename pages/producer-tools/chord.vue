@@ -128,7 +128,6 @@
 
     <h1>三和弦试听</h1>
 
-    <!--<button class="ring p-2 m-2 rounded" @click="handleClickChord">播放</button>-->
     <div>
       <span>高亮</span>
       <select v-model="currentScaleNote">
@@ -148,11 +147,14 @@
         <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
         <!-- 遍历所有12音 -->
         <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
-          <!--<template v-for="i in accumulate([1, 2, 2, 1, 2, 2, 2])" :key="`${enumNumberString}-${i}`">-->
           <button
               :class="{
                   'outline': (
-                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                          new Chord(
+                                new Note(3, i),
+                                parseInt(enumNumberString),
+                                ChordExtension.None
+                              )
                       ).getScale().includes(currentScaleNote)
                 }"
               class="m-1 w-16 rounded hover:scale-105 transition active:scale-95"
@@ -190,15 +192,14 @@
         <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
         <!-- 遍历所有12音 -->
         <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
-          <!--<template v-for="i in accumulate([1, 2, 2, 1, 2, 2, 2])" :key="`${enumNumberString}-${i}`">-->
           <button
               :class="{
                   'ring': (
-                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                      ).getScale().includes(scaleNoteBefore),
+                        new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                   ).getScale().includes(scaleNoteBefore),
                   'bg-allogenes-dark': (
-                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                      ).getScale().includes(scaleNoteAfter),
+                      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                   ).getScale().includes(scaleNoteAfter),
                 }"
               class="m-1 w-16 ring-allogenes-deep normalChord rounded hover:scale-105 transition active:scale-95"
               @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
@@ -302,8 +303,6 @@ import PianoPlayer from "~/services/pianoPlayer";
 import Chord, {ChordExtension, ChordType} from "~/services/chord";
 import Note from "~/services/note";
 import {range} from "~/utils/math";
-import {accumulate} from "~/utils/itertools";
-
 
 /**
  * 当前选择的音阶音符
@@ -335,7 +334,7 @@ function handleClickChordByArgs(number: number, chordType: ChordType, chordExten
   }
   PianoPlayer.playChord(
       new Chord(
-          new Note(3, number),  //
+          new Note(3, number),
           chordType,
           chordExtension
       ),
@@ -353,6 +352,7 @@ function handleClickChordByArgs(number: number, chordType: ChordType, chordExten
 
 
 function login() {
+
   window.location.href =
       "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
 }

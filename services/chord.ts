@@ -13,6 +13,26 @@ export enum ChordType {
     Fifth,  // 纯五度和弦
 }
 
+function getChordTypeByName(name: string): ChordType | undefined {
+    switch (name) {
+        case "Maj":
+            return ChordType.Maj;
+        case "Min":
+            return ChordType.Min;
+        case "Dim":
+            return ChordType.Dim;
+        case "Aug":
+            return ChordType.Aug;
+        case "Sus2":
+            return ChordType.Sus2;
+        case "Sus4":
+            return ChordType.Sus4;
+        case "Fifth":
+            return ChordType.Fifth;
+        default:
+            return undefined; // 如果名称不匹配，则返回 undefined
+    }
+}
 /**
  * 和弦的附加音
  * 6、7、Maj7、add9、9、11、13
@@ -95,6 +115,9 @@ export default class Chord {
                 thirdTranspose = 4;
                 fifthTranspose = 8;
                 break;
+            case ChordType.Fifth:
+                // 不用管
+                break;
             default:
                 console.warn('未知的和弦类型', this.type, typeof this.type);
                 break;
@@ -139,6 +162,7 @@ export default class Chord {
         return res;
     }
 
+    // @ts-ignore
     /**
      * 从和弦的字符串名字中解析出对象，目前仅支持三和弦
      * @param name {string} 例如：'D#Maj'
@@ -146,13 +170,15 @@ export default class Chord {
     static fromName(name: string): Chord {
         const sliceIndex = name.includes("#") ? 2 : 1;
         const baseNote: string = name.slice(0, sliceIndex);
-        const chordType: string = name.slice(sliceIndex, name.length);
+        const chordType: ChordType = getChordTypeByName(name.slice(sliceIndex, name.length));
+
         return new Chord(
             Note.fromNoteName(`${baseNote}3`),
-            ChordType[chordType],
+            chordType,
             ChordExtension.None,
         )
     }
+
     /**
      * 获取和弦名称
      * @returns {string} 和弦名称，例如 'D#Maj'

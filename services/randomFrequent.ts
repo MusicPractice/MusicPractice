@@ -9,22 +9,28 @@ export default class RandomFrequent {
     static history: Array<{ answer: number, guess: number, result: boolean }> = [];
     static correctCount: number = 0; // 正确次数
     // 每次播放时长
-    static duration = 0.5;  // s
+    static duration: number = 0.5;  // s
 
-    static audioContext = new (window.AudioContext)();
+    // nuxt 报错，window is not defined，需要使用浏览器来判断
+    static audioContext = process.client ? new window.AudioContext() : null;
 
     /**
      * 此时此刻，用户是否已经验证过了
      * 如果返回false，则表示用户目前可以点击“验证”按钮
      * true，表示不能点击验证，已经验证过了
      */
-    static isValid = false;
+    static isValid: boolean = false;
+
     get accuracy(): number {
         if (RandomFrequent.history.length === 0) return 0;
         return RandomFrequent.correctCount / RandomFrequent.history.length;
     }
 
-    static playSound() {
+    static playSound(): void {
+        if (this.audioContext === null) {
+            console.warn('当前是非浏览器环境，不能播放')
+            return;
+        }
         const oscillator = this.audioContext.createOscillator();
 
         // 设置频率

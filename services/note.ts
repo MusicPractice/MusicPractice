@@ -23,6 +23,9 @@ export default class Note {
      */
     constructor(group: number, number: number) {
         this.group = group;
+        if (number < 1 || number > 12) {
+            console.warn('构造音符出错', number, '超出范围,number');
+        }
         this.idx = number;
     }
 
@@ -140,7 +143,6 @@ export default class Note {
                 res.push(baseScaleNoteString);
             }
         }
-        console.log(this.getNoteName(), '的调', res)
         return res;
     }
 }
