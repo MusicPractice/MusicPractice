@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import PianoPlayer from "~/services/pianoPlayer";
 import Note from "~/services/note";
+import Chord, {ChordExtension, ChordType} from "~/services/chord";
 
 function playTest() {
-  PianoPlayer.playNote('3_01');
-  PianoPlayer.playNote('3_05');
-  PianoPlayer.playNote('3_08');
   console.log('======');
   const n = Note.fromNoteName('G5');
   console.log(n.getFileName());
@@ -16,6 +14,29 @@ async function load() {
   alert('加载完毕')
 }
 
+
+console.log('====')
+console.log(ChordType.Maj);  // 0  number
+console.log(ChordType.Maj === 0);  // 0  number
+console.log(ChordType.Maj === '0');  // 0  number
+
+console.log(ChordType[1]);  // Min  string
+console.log(ChordType['1']);  // Min  string
+console.log(ChordType.Maj);  // 0   number
+console.log(ChordType['Min']);  // 1   number
+
+console.log('___')
+for (let item in ChordType) {
+  console.log(item);
+}
+// '0', '1', '2', .... 'Maj', 'Min', ...
+console.log('++++')
+for (let item in Object.keys(ChordType)) {
+  console.log(item)
+}
+// '0', '1', '2', .... 没有字面量
+
+console.log('----')
 </script>
 
 <template>

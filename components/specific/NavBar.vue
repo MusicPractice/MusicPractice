@@ -51,6 +51,10 @@ const links: Array<NavItem> = [
     to: '/author',
     title: '关于作者',
   },
+  {
+    to: '/test',
+    title: '测试',
+  },
 ]
 </script>
 

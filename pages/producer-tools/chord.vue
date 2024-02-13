@@ -1,6 +1,6 @@
 <template>
   <div class="Chord">
-    <h1>和弦</h1>
+    <h1>和弦表</h1>
     <table>
       <thead>
       <tr>
@@ -97,6 +97,117 @@
       </tr>
       </tbody>
     </table>
+
+    <h1>和弦试听</h1>
+    <div>
+      <span>和弦根音</span>
+      <select>
+        <option v-for="i in range(0, 12)" :key="`root-${i}`">
+          {{ Note.SCALE_LIST[i] }}
+        </option>
+      </select>
+    </div>
+    <!--遍历所有附加音种类-->
+    <template v-for="(enumNumberString) in Object.keys(ChordExtension)" :key="`${enumNumberString}`">
+      <div v-if="typeof ChordExtension[enumNumberString] === 'string'" class="flex">
+
+        <h3 class="w-16 h-16">{{ ChordExtension[enumNumberString] }}</h3>
+        <!-- 遍历所有12音 -->
+        <span class="flex" v-for="chordTypeStr in Object.keys(ChordType)" :key="`${chordTypeStr}`">
+          <button
+              v-if="typeof ChordType[chordTypeStr] === 'string'"
+              class="m-1 w-32 ring rounded hover:scale-105 transition active:scale-95"
+              @click="handleClickChordByArgs(1, parseInt(chordTypeStr), parseInt(enumNumberString))">
+            {{ ChordType[chordTypeStr] + '/' + ChordExtension[enumNumberString] }}
+          </button>
+        </span>
+      </div>
+    </template>
+
+    <h1>三和弦试听</h1>
+    <p>请先点击加载音源，然后再点播放才能试听</p>
+    <button class="ring p-2 m-2 rounded" @click="handleClickLoad">加载音源</button>
+    <!--<button class="ring p-2 m-2 rounded" @click="handleClickChord">播放</button>-->
+    <div>
+      <span>高亮</span>
+      <select v-model="currentScaleNote">
+        <option
+            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
+        </option>
+      </select>
+      <span>大调和弦</span>
+
+      <span>增加低音</span>
+      <input type="checkbox" v-model="isAddBass">
+    </div>
+    <!-- 遍历所有和弦类型 -->
+    <template v-for="(enumNumberString) in Object.keys(ChordType)" :key="`${enumNumberString}`">
+      <div v-if="typeof ChordType[enumNumberString] === 'string'" class="flex">
+
+        <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
+        <!-- 遍历所有12音 -->
+        <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
+          <!--<template v-for="i in accumulate([1, 2, 2, 1, 2, 2, 2])" :key="`${enumNumberString}-${i}`">-->
+          <button
+              :class="{
+                  'outline': (
+                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                      ).getScale().includes(currentScaleNote)
+                }"
+              class="m-1 w-16 rounded hover:scale-105 transition active:scale-95"
+              @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
+            {{ new Note(3, i).getNoteNameFix() + ChordType[enumNumberString] }}
+          </button>
+        </template>
+      </div>
+    </template>
+
+    <h1>不同调之间的共用三和弦直观查看</h1>
+    <div>
+      <span>高亮</span>
+      <select v-model="scaleNoteBefore">
+        <option
+            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
+        </option>
+      </select>
+      <span>大调和弦</span>
+
+      <span>高亮</span>
+      <select v-model="scaleNoteAfter">
+        <option
+            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
+        </option>
+      </select>
+      <span>大调和弦</span>
+
+      <span>增加低音</span>
+      <input type="checkbox" v-model="isAddBass">
+    </div>
+    <template v-for="(enumNumberString) in Object.keys(ChordType)" :key="`compare-${enumNumberString}`">
+      <div v-if="typeof ChordType[enumNumberString] === 'string'" class="flex">
+
+        <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
+        <!-- 遍历所有12音 -->
+        <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
+          <!--<template v-for="i in accumulate([1, 2, 2, 1, 2, 2, 2])" :key="`${enumNumberString}-${i}`">-->
+          <button
+              :class="{
+                  'ring': (
+                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                      ).getScale().includes(scaleNoteBefore),
+                  'bg-allogenes-dark': (
+                          new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+                      ).getScale().includes(scaleNoteAfter),
+                }"
+              class="m-1 w-16 ring-allogenes-deep normalChord rounded hover:scale-105 transition active:scale-95"
+              @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
+            {{ new Note(3, i).getNoteNameFix() + ChordType[enumNumberString] }}
+          </button>
+        </template>
+      </div>
+    </template>
+
+
     <h1>和弦进行</h1>
     <h2>大调系列</h2>
     <ul>
@@ -185,56 +296,81 @@
   </div>
 </template>
 
-<script>
-useSeoMeta({
-  title: "个人音乐作品展 | 和弦笔记",
-  description: "学习各种和弦的笔记, 以及各种和弦进行",
-  keywords: "音乐, 和弦, 和弦进行, 乐理, 大调, 小调, 流行音乐",
-});
-export default {
-  data() {
-    return {
-      chords: [
-        {
-          id: 1,
-          englishName: "Major",
-          chineseName: "大三和弦",
-          feel: "明亮/开心",
-        },
-        {
-          id: 2,
-          englishName: "Minor",
-          chineseName: "小三和弦",
-          feel: "阴冷/悲伤",
-        },
-        {id: 3, englishName: "D7", chineseName: "D7", feel: "有张力"},
-        // 添加更多和弦数据
-      ],
-      meta: {
-        hid: "hid",
-        name: "description",
-        content: "关于我们页面的描述",
-      },
-    };
-  },
-  methods: {
-    login() {
-      window.location.href =
-          "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
-    },
-    exit() {
-      localStorage.removeItem("token");
-      window.location.reload();
-    },
-  },
-};
+<script setup lang="ts">
+import PianoPlayer from "~/services/pianoPlayer";
+import Chord, {ChordExtension, ChordType} from "~/services/chord";
+import Note from "~/services/note";
+import {range} from "~/utils/math";
+import {accumulate} from "~/utils/itertools";
+
+
+/**
+ * 当前选择的音阶音符
+ */
+const currentScaleNote = ref<string>('C');
+
+const scaleNoteBefore = ref<string>('C');
+const scaleNoteAfter = ref<string>('D');
+
+/**
+ * 试听和弦是否增加低音
+ */
+const isAddBass = ref<boolean>(false);
+
+async function handleClickLoad() {
+  await PianoPlayer.loadAudio('default');
+  alert('加载完毕');
+}
+
+function handleClickChord() {
+  const C = new Chord(new Note(3, 1), ChordType.Maj, ChordExtension.None);
+  PianoPlayer.playChord(C, false);
+}
+
+/**
+ * 绑定不同的点击和弦按钮
+ * @param number
+ * @param chordType
+ * @param chordExtension
+ */
+function handleClickChordByArgs(number: number, chordType: ChordType, chordExtension: ChordExtension) {
+  while (number > 12) {
+    number -= 12;
+  }
+  PianoPlayer.playChord(
+      new Chord(
+          new Note(3, number),  //
+          chordType,
+          chordExtension
+      ),
+      true,
+  );
+  if (isAddBass.value) {
+    PianoPlayer.playNote(
+        new Note(
+            0,
+            number
+        )
+    )
+  }
+}
+
+
+function login() {
+  window.location.href =
+      "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
+}
+
+function exit() {
+  localStorage.removeItem("token");
+  window.location.reload();
+}
 </script>
 
 <style lang="scss">
 .Chord {
   overflow: auto;
-  padding: 20px 50px;
-  padding-bottom: 200px;
+  padding: 20px 50px 200px;
 
   h1 {
     text-align: center;

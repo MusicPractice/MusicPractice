@@ -1,5 +1,6 @@
 import {Howl} from 'howler';
 import Note from "~/services/note";
+import Chord from "~/services/chord";
 
 /**
  * 音频播放者类
@@ -33,13 +34,28 @@ export default class PianoPlayer {
     /**
      * 播放一个音符的声音
      */
-    static playNote(note: string) {
-        const audio = this.audioFiles[note];
+    static playNote(note: Note) {
+        const audio = this.audioFiles[note.getFileName()];
         if (audio) {
-            console.log(audio)
             audio.play();
         } else {
-            console.error(`找不到音符 ${note} 的音频文件`);
+            console.error(`找不到音符 ${note.getFileName()} 的音频文件`);
+        }
+    }
+
+    /**
+     * 博凡一个和弦的声音
+     * @param chord
+     * @param autoTrans {boolean} 是否自动转位
+     */
+    static playChord(chord: Chord, autoTrans: boolean): void {
+
+        for (let note of chord.getNotes()) {
+            console.log(note.getNoteName(), note.group);
+            if (autoTrans && note.group >= 4) {
+                note = note.transpose(-12);
+            }
+            this.playNote(note);
         }
     }
 

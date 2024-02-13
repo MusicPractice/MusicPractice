@@ -6,19 +6,24 @@
  * 音名格式：'C4',  'C#4'
  *
  */
+import {accumulate} from "~/utils/itertools";
 
 export default class Note {
     group: number;
     idx: number;
 
+    static SCALE_LIST: string[] = [
+        'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
+    ];
+
     /**
      * 生成一个音符
      * @param group {number} 第几大组
-     * @param idx {number} [1, 12]
+     * @param number {number} 从1开始 [1, 12]
      */
-    constructor(group: number, idx: number) {
+    constructor(group: number, number: number) {
         this.group = group;
-        this.idx = idx;
+        this.idx = number;
     }
 
     /**
@@ -33,10 +38,42 @@ export default class Note {
      * @returns {string} 音名格式，例如 'C4', 'C#4'
      */
     getNoteName(): string {
-        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-        const octave = this.group + 1; // 转换成音名中的八度表示
-        const noteName = noteNames[this.idx - 1]; // 根据音符的 idx 获取对应的音名
+        const octave: number = this.group + 1; // 转换成音名中的八度表示
+        const noteName: string = Note.SCALE_LIST[this.idx - 1]; // 根据音符的 idx 获取对应的音名
         return `${noteName}${octave}`;
+    }
+
+    /**
+     * 获取音名的前缀，不加组号
+     */
+    getNoteNameFix(): string {
+        // 根据音符的 idx 获取对应的音名
+        return Note.SCALE_LIST[this.idx - 1]
+    }
+
+    /**
+     * 当前这个音符.add(2) 提升一个全音，返回一个新的音符对象
+     * @param n {number} 半音
+     */
+    transpose(n: number): Note {
+        // 计算新的索引值和组号
+        let newGroup = this.group;
+        let newIdx = this.idx + n;
+
+        // 处理索引值超过或等于12的情况
+        while (newIdx >= 12) {
+            newIdx -= 12;
+            newGroup++;
+        }
+
+        // 处理索引值小于等于0的情况
+        while (newIdx <= 0) {
+            newIdx += 12;
+            newGroup--;
+        }
+
+        // 创建新的音符对象并返回
+        return new Note(newGroup, newIdx);
     }
 
     /**
@@ -48,18 +85,14 @@ export default class Note {
         const noteNameRegex = /^([A-G]#?)(\d+)$/;
         const match = noteName.match(noteNameRegex);
         if (!match) {
-            throw new Error('不合法的音名');
+            throw new Error(`不合法的音名[${noteName}]`);
         }
-        const [, noteNamePart, octaveStr] = match;
-        const octave = parseInt(octaveStr);
-        const idx = noteName.indexOf(noteNamePart) + 1;
-        if (idx === 0) {
-            throw new Error('不合法的音名');
-        }
-        const group = octave - 1;
-
+        let sliceFixEnd = noteName.includes('#') ? 2 : 1;
+        const groupString = noteName.slice(sliceFixEnd, noteName.length);
+        const group: number = parseInt(groupString) - 1;
+        const fix: string = noteName.slice(0, sliceFixEnd);
         // 创建音符对象并返回
-        return new Note(group, idx);
+        return new Note(group, Note.SCALE_LIST.indexOf(fix) + 1);
     }
 
 
@@ -76,4 +109,40 @@ export default class Note {
         // 创建音符对象并返回
         return new Note(group, idx);
     }
+
+    /**
+     * 判断这个音符属于哪些音阶
+     * 例如，C4
+     * 属于 C调，G调，F调，#D调，#G调，#A调
+     * 这里的调说的是大调
+     */
+    getScale() {
+        const noteNameFix = this.getNoteNameFix(); // 获取音名的前缀，不含八度
+        const res: string[] = [];
+        const scaleList = [0, 2, 2, 1, 2, 2, 2, 1]; // 大调音阶
+        const scaleListAccumulate: number[] = accumulate(scaleList);
+
+        // 先遍历每一个调
+        for (const baseScaleNoteString of Note.SCALE_LIST) {
+            // 根据这个调，的基音，推出这个调的所有音
+            let curNote: Note = Note.fromNoteName(`${baseScaleNoteString}4`);
+            // console.log(`${baseScaleNoteString}音阶 起始音:${curNote.getNoteName()}`);
+
+            const newScaleList: string[] = [];
+
+            for (const add of scaleList) {
+                curNote = curNote.transpose(add);
+                newScaleList.push(curNote.getNoteNameFix());
+            }
+            // console.log(`以${baseScaleNoteString}为基音的大调为[${newScaleList}]`);
+
+            if (newScaleList.includes(noteNameFix)) {
+                res.push(baseScaleNoteString);
+            }
+        }
+        console.log(this.getNoteName(), '的调', res)
+        return res;
+    }
 }
+
+
