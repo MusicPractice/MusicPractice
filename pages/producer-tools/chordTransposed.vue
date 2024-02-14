@@ -25,13 +25,14 @@ onMounted(async () => {
 });
 
 // 基础的和弦格子样式
-const baseClass = 'm-1 w-16 text-black p-1 normalChord rounded hover:scale-105 transition active:scale-95';
+const baseClass = 'm-1 w-16 p-1 normalChord rounded hover:scale-105 transition active:scale-95';
 // 转调前和弦样式
-const beforeClass = 'bg-green-light';
+// const beforeClass = 'bg-green-light';
+const beforeClass = 'bg-green-700';
 // 转调厚和弦样式
-const afterClass = 'bg-red-light';
+const afterClass = 'bg-red-700';
 // 公用和弦
-const joinClass = 'bg-yellow-light';
+const joinClass = 'bg-yellow-700';
 
 /**
  * 绑定不同的点击和弦按钮

@@ -5,6 +5,12 @@ import Note from "~/services/note";
 import Chord from "~/services/chord";
 
 /**
+ * todo 可以来一个自动和弦伴奏
+ *
+ */
+
+
+/**
  * 当前是否是正在加载音源的阶段
  */
 const isLoading = ref<boolean>(true);

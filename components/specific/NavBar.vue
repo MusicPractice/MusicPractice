@@ -61,29 +61,29 @@ const links: Array<NavItem> = [
 </script>
 
 <template>
-  <div class="w-48 bg-allogenes-dark flex flex-col shadow-inner shadow-allogenes-deep relative">
-    <h1 class="text-2xl text-yellow-950 font-bold pl-2 py-4 mb-4">个人音乐小站</h1>
+  <div class="w-48 bg-stone-900 text-stone-200 flex flex-col shadow-inner ring ring-blue-400 shadow-allogenes-deep relative">
+    <h1 class="text-xl font-bold pl-2 py-4 mb-4">个人音乐小站</h1>
     <template v-for="link in links" :key="link.to">
       <section v-if="link.child"
                class="leading-8">
-        <h2 class="pl-4 font-bold text-yellow-950">{{ link.title }}</h2>
+        <h2 class="pl-4 font-bold">{{ link.title }}</h2>
         <nuxt-link v-for="childLink in link.child"
                    :key="childLink.title"
                    :to="link.to + childLink.to"
-                   class="pl-8 block">
+                   class="pl-8 block text-stone-300">
           {{ childLink.title }}
         </nuxt-link>
       </section>
       <nuxt-link
           v-else
           :to="link.to"
-          class="leading-8 pl-4 font-bold text-yellow-950">
+          class="leading-8 pl-4 font-bold text-stone-300">
         {{ link.title }}
       </nuxt-link>
     </template>
 
     <div
-        class="bg-gradient-to-b from-allogenes-dark to-allogenes-deep text-wood-white absolute bottom-0 text-center p-2 text-xs leading-4">
+        class="bg-gradient-to-b from-stone-900 to-stone-950 text-stone-500 absolute bottom-0 text-center p-2 text-xs leading-4">
       <p>分享个人创作的音乐作品 | 乐理学习笔记 | 您可以在此训练音乐能力</p>
       <p>站长油箱：littlefean at bitmountain dot top</p>
       <a href="https://beian.miit.gov.cn/" target="_blank"

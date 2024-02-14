@@ -1,7 +1,7 @@
 <template>
   <app-alert/>
   <NavBar/>
-  <NuxtPage class="bg-stone-200 text-stone-800"/>
+  <NuxtPage class="bg-stone-800 text-stone-200"/>
 </template>
 
 <script lang="ts" setup>
@@ -46,7 +46,27 @@ router.beforeEach((to, from, next) => {
   font-family: -apple-system, system-ui, sans-serif;
 
   &::selection {
-    background-color: #c5a381;
+    //background-color: #c5a381;
+  }
+}
+
+select {
+  background: transparent;
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  &:focus {
+    background-color: transparent;
+  }
+
+  option {
+    background: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
   }
 }
 
@@ -62,12 +82,12 @@ table {
   }
 
   th {
-    background-color: #c5a381;
+    //background-color: #c5a381;
   }
 
   tr {
     &:nth-child(odd) {
-      background-color: #dcd8d8;
+      //background-color: #dcd8d8;
     }
   }
 }

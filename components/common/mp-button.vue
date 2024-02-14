@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <button class="leading-loose ring rounded mx-1 px-2 bg-stone-300">
+  <button class="leading-loose ring rounded mx-2 px-2 bg-stone-900 hover:ring-blue-400 transition active:bg-stone-950 active:ring-blue-200">
     <slot></slot>
   </button>
 </template>
