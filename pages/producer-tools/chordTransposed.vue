@@ -1,5 +1,9 @@
 <script setup lang="ts">
-
+/**
+ * 增加一个点击箭头的声音
+ *
+ *
+ */
 import Note from "~/services/note";
 import Chord, {ChordExtension, ChordType} from "~/services/chord";
 import {range} from "~/utils/math";
