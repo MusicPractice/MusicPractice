@@ -90,6 +90,7 @@ export default class Chord {
 
     /**
      * 计算并获取这个和弦所组成音符序列
+     * 返回的构成序列必定保证第一个音是基音，有序音调递增
      */
     getNotes(): Note[] {
         let thirdTranspose = 0;  // 三音，三和弦中，中间那个音的音程比根音高几个半音

@@ -167,7 +167,7 @@
 import {range} from "~/utils/math";
 import Note from "~/services/note";
 import Chord, {ChordExtension, ChordType} from "~/services/chord";
-import PianoPlayer from "~/services/pianoPlayer";
+import PianoPlayer, {Timber} from "~/services/pianoPlayer";
 
 /**
  * 当前选择的音阶音符
@@ -198,7 +198,7 @@ function renderNoteName(i: number, enumNumberString: string): string {
 const isAddBass = ref<boolean>(false);
 
 async function handleClickLoad() {
-  await PianoPlayer.loadAudio('default');
+  await PianoPlayer.loadAudio(Timber.defaultTimber);
   alert('加载完毕');
 }
 

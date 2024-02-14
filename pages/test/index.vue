@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PianoPlayer from "~/services/pianoPlayer";
+import PianoPlayer, {Timber} from "~/services/pianoPlayer";
 import Note from "~/services/note";
 import Chord, {ChordExtension, ChordType} from "~/services/chord";
 
@@ -10,7 +10,7 @@ function playTest() {
 }
 
 async function load() {
-  await PianoPlayer.loadAudio('default');
+  await PianoPlayer.loadAudio(Timber.defaultTimber);
   alert('加载完毕')
 }
 
