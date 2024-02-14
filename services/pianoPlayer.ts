@@ -12,6 +12,22 @@ export enum Timber {
 }
 
 /**
+ * 和弦播放模式
+ */
+export enum ChordPlayMode {
+    // [123]
+    Columnar,
+    // 1 2 3 2
+    rootThreeFifthThree,
+    // 1 5 1. 3.
+    rootFifthRootThree,
+    // 琶音
+    arpeggio,
+    // 中音向上翻阅八度
+    LargeColumnar,
+}
+
+/**
  * 音频播放者类
  */
 export default class PianoPlayer {
@@ -76,19 +92,79 @@ export default class PianoPlayer {
      * @param chord
      * @param autoTrans {boolean} 是否自动转位
      * 自动转位的原理：一旦和弦音高于基音超过一个八度，就降低且仅降低一个八度。
+     * @param mode {ChordPlayMode} 是否是分解和弦
      */
-    static playChord(chord: Chord, autoTrans: boolean): void {
+    static playChord(chord: Chord, autoTrans: boolean, mode?: ChordPlayMode): void {
         const chordNotes: Note[] = chord.getNotes();
         const baseNoteGroup: number = chordNotes[0].group;
 
-        for (let note of chordNotes) {
-            console.log(note.getNoteName(), note.group);
-            // 自动转位的原理，一旦和弦音高于基音一个八度，就降低一个八度。
-            if (autoTrans && note.group > baseNoteGroup) {
-                note = note.transpose(-12);
-            }
-            this.playNote(note);
+        // 用于在播放和弦时播放一个音符
+        const playNoteInChord = (note: Note, delayMs: number) => {
+            setTimeout(() => {
+                this.playNote(note);
+            }, delayMs);
         }
+
+        const columnarPlay = () => {
+            console.log('柱式和弦')
+            for (let note of chordNotes) {
+                console.log(note.getNoteName(), note.group);
+                // 自动转位的原理，一旦和弦音高于基音一个八度，就降低一个八度。
+                if (autoTrans && note.group > baseNoteGroup) {
+                    note = note.transpose(-12);
+                }
+                this.playNote(note);
+            }
+        }
+
+        switch (mode) {
+            case ChordPlayMode.Columnar:
+                columnarPlay();
+                break;
+            case ChordPlayMode.rootFifthRootThree:
+                playNoteInChord(chordNotes[0], 0);
+                playNoteInChord(chordNotes[2], 200);
+                playNoteInChord(chordNotes[0].transpose(12), 400);
+                playNoteInChord(chordNotes[1].transpose(12), 600);
+                break;
+            case ChordPlayMode.rootThreeFifthThree:
+                playNoteInChord(chordNotes[0], 0);
+                playNoteInChord(chordNotes[1], 500);
+                playNoteInChord(chordNotes[2], 1000);
+                playNoteInChord(chordNotes[1], 1500);
+                break;
+            case ChordPlayMode.arpeggio:
+                const playNoteList = [
+                    chordNotes[0],
+                    chordNotes[1],
+                    chordNotes[2],
+                    chordNotes[0].transpose(12),
+                    chordNotes[1].transpose(12),
+                    chordNotes[2].transpose(12),
+                    chordNotes[1].transpose(12),
+                    chordNotes[0].transpose(12),
+                    chordNotes[2],
+                    chordNotes[1],
+                    chordNotes[0],
+                    chordNotes[1],
+                    chordNotes[2],
+                    chordNotes[0].transpose(12),
+                ];
+                for (let i = 0; i < playNoteList.length; i++) {
+                    playNoteInChord(playNoteList[i], i * 150);
+                }
+                break;
+            case ChordPlayMode.LargeColumnar:
+                console.log(123)
+                playNoteInChord(chordNotes[0], 0);
+                playNoteInChord(chordNotes[1].transpose(12), 0);
+                playNoteInChord(chordNotes[2], 0);
+                break;
+            default:
+                console.warn('未知的类型')
+                columnarPlay();
+        }
+
     }
 
 }

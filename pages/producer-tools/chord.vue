@@ -1,7 +1,10 @@
 <template>
   <div class="Chord">
-    <p>请先点击加载音源，然后再点播放才能试听</p>
-    <button class="ring p-2 m-2 rounded" @click="handleClickLoad">加载音源</button>
+    <template v-if="isLoading">
+      <div class="h-screen flex justify-center items-center">
+        <h1>音源加载中...</h1>
+      </div>
+    </template>
     <h1>和弦表</h1>
     <table>
       <thead>
@@ -116,49 +119,15 @@
         <h3 class="w-16 h-16">{{ ChordExtension[enumNumberString] }}</h3>
         <!-- 遍历所有12音 -->
         <span class="flex" v-for="chordTypeStr in Object.keys(ChordType)" :key="`${chordTypeStr}`">
-          <button
+          <mp-button
               v-if="typeof ChordType[chordTypeStr] === 'string'"
               class="m-1 w-32 ring rounded hover:scale-105 transition active:scale-95"
-              @click="handleClickChordByArgs(1, parseInt(chordTypeStr), parseInt(enumNumberString))">
+              @mousedown="handleClickChordByArgs(1, parseInt(chordTypeStr), parseInt(enumNumberString))">
             {{ ChordType[chordTypeStr] + '/' + ChordExtension[enumNumberString] }}
-          </button>
+          </mp-button>
         </span>
       </div>
     </template>
-
-    <h1>三和弦试听</h1>
-
-    <div>
-      <span>高亮</span>
-      <select v-model="currentScaleNote">
-        <option
-            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
-        </option>
-      </select>
-      <span>大调和弦</span>
-
-      <span>增加低音</span>
-      <input type="checkbox" v-model="isAddBass">
-    </div>
-    <!-- 遍历所有和弦类型 -->
-    <template v-for="(enumNumberString) in Object.keys(ChordType)" :key="`${enumNumberString}`">
-      <div v-if="typeof ChordType[enumNumberString] === 'string'" class="flex">
-
-        <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
-        <!-- 遍历所有12音 -->
-        <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
-          <button
-              :class="{
-                  'outline': isCurChordInScale(i, enumNumberString)
-                }"
-              class="m-1 w-16 rounded hover:scale-105 transition active:scale-95"
-              @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
-            {{ renderNoteName(i, enumNumberString) }}
-          </button>
-        </template>
-      </div>
-    </template>
-
 
   </div>
 </template>
@@ -168,39 +137,29 @@ import {range} from "~/utils/math";
 import Note from "~/services/note";
 import Chord, {ChordExtension, ChordType} from "~/services/chord";
 import PianoPlayer, {Timber} from "~/services/pianoPlayer";
+import MpButton from "~/components/common/mp-button.vue";
+
+/**
+ * 当前是否是正在加载音源的阶段
+ */
+const isLoading = ref<boolean>(true);
+
+onMounted(async () => {
+  await PianoPlayer.loadAudio(Timber.defaultTimber);
+  isLoading.value = false;
+});
 
 /**
  * 当前选择的音阶音符
  */
 const currentScaleNote = ref<string>('C');
 
-/**
- * 判断当前这个和弦是否在调内
- */
-function isCurChordInScale(i: number, enumNumberString: string): boolean {
-  return (
-      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-  ).getScale().includes(currentScaleNote.value)
-}
-
-/**
- * 渲染和弦名称
- * @param i
- * @param enumNumberString
- */
-function renderNoteName(i: number, enumNumberString: string): string {
-  return new Note(3, i).getNoteNameFix() + ChordType[parseInt(enumNumberString)];
-}
 
 /**
  * 试听和弦是否增加低音
  */
 const isAddBass = ref<boolean>(false);
 
-async function handleClickLoad() {
-  await PianoPlayer.loadAudio(Timber.defaultTimber);
-  alert('加载完毕');
-}
 
 /**
  * 绑定不同的点击和弦按钮
