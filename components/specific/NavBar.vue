@@ -31,7 +31,9 @@ const links: Array<NavItem> = [
     to: '/producer-tools',
     title: '编曲学习',
     child: [
-      {to: '/chord', title: '和弦与和弦进行'},
+      {to: '/chord', title: '和弦'},
+      {to: '/chordTransposed', title: '和弦转调'},
+      {to: '/chordProgression', title: '和弦进行'},
       {to: '/transcribeMusic', title: '扒谱学习'},
       {to: '/timbre', title: '音色收集'},
     ]

@@ -165,152 +165,21 @@
       </div>
     </template>
 
-    <h1>不同调之间的共用三和弦直观查看</h1>
-    <div>
-      <span>高亮</span>
-      <select v-model="scaleNoteBefore">
-        <option
-            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
-        </option>
-      </select>
-      <span>大调和弦</span>
 
-      <span>高亮</span>
-      <select v-model="scaleNoteAfter">
-        <option
-            :value="name" v-for="name in Note.SCALE_LIST" :key="name">{{ name }}
-        </option>
-      </select>
-      <span>大调和弦</span>
-
-      <span>增加低音</span>
-      <input type="checkbox" v-model="isAddBass">
-    </div>
-    <template v-for="(enumNumberString) in Object.keys(ChordType)" :key="`compare-${enumNumberString}`">
-      <div v-if="typeof ChordType[enumNumberString] === 'string'" class="flex">
-
-        <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
-        <!-- 遍历所有12音 -->
-        <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
-          <button
-              :class="{
-                  'ring': (
-                        new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                   ).getScale().includes(scaleNoteBefore),
-                  'bg-allogenes-dark': (
-                      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                   ).getScale().includes(scaleNoteAfter),
-                }"
-              class="m-1 w-16 ring-allogenes-deep normalChord rounded hover:scale-105 transition active:scale-95"
-              @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
-            {{ new Note(3, i).getNoteNameFix() + ChordType[enumNumberString] }}
-          </button>
-        </template>
-      </div>
-    </template>
-
-
-    <h1>和弦进行</h1>
-    <h2>大调系列</h2>
-    <ul>
-      <li>1245：刚学Cubase的时候老师给推荐的和弦进行</li>
-      <li>
-        1645：阳光感，大调，（褐色回忆/林荫小路）第二个6可以改为一个七和弦
-      </li>
-      <li>1 6m7 4 5sus</li>
-      <li>1625：《风吹麦浪》</li>
-      <li>1451 CFGC：超级阳光开朗的大调，《单调有界必有极限》</li>
-      <li>1add9 - 4 - 5 - 1add9：我们都需要勇气...</li>
-      <li>1545：非常阳光的和弦进行，小米的来电铃声</li>
-      <li>1564：经典流行，《let it be》</li>
-      <li>1325：雪夜山谷，温馨感</li>
-      <li>
-        251进行：大调Dm G C 小调 Ddim G Cm ，可以三全音替代 Dmin7 G7 Cmaj7
-        小调：Dmin7 Db7 Cmaj7
-      </li>
-      <li>
-        1314451 C-Em-C-F-F-G7-C：整活的空耳旋律抽取的和弦进行，《甘美风来》
-      </li>
-    </ul>
-    <h2>小调系列</h2>
-    <ul>
-      <li>6543：小调和弦进行，黑暗风格（残梦霓虹的末日挽歌）末日火山</li>
-      <li>6543 6523：对上面和弦进行的扩展（孤独星球）</li>
-      <li>6541 6545：宏大史诗感（核污水时代）（三和弦的三级音向上八度）</li>
-      <li>
-        6415
-        641(sus2)5：悲伤感小调（暗夜花火），事实上，好多的较为悲伤的歌曲都使用了这个和弦进行
-      </li>
-      <li>6415：《杀破狼》</li>
-      <li>6533 6543：信息茧房</li>
-      <li>6543 234(2大)：《流星云》</li>
-      <li>6536：残梦霓虹的《好戏开场》弦乐断奏和弦，张力</li>
-      <li>2456：小调但不悲伤，大提琴但拉2456不是三和弦，《虫战》</li>
-      <li>2516：《贝加尔湖畔》</li>
-      <li>6451：《偏爱》、《七里香》</li>
-      <li>2615：适合战斗类游戏音乐的编曲（然后改成F调）《铁锈战争》</li>
-      <li>
-        4566：《晚夜微雨问海棠》视频教程里看的小调常用和弦进行，结束的时候就F->
-        G-> Am
-      </li>
-      <li>
-        4565(最好升成D调)：（遗憾的惆怅）一个老外教的，要把第三音向上翻阅八度
-      </li>
-      <li>
-        3456(最好升成F#调)：（温馨中带有惆怅）一个老外教的，要把第三音向上翻阅八度，然后第一个和弦和最后一个和弦的最高音塞满全部
-      </li>
-      <li>
-        6524(最好降成Bb调)：（凄凉悲伤）一个老外教的，要把第三音向上翻阅八度，然后前三个注释和弦都补充最后一个和弦的最高音
-      </li>
-      <li>
-        G D A B
-        （G调的小忧伤）：三音上翻八度，前两个小节温馨温暖，后两个小节突然忧伤
-      </li>
-    </ul>
-    <h2>古典/流行</h2>
-    <ul>
-      <li>卡农进行：C-G-Am-Em-F-C-F-G（15634145）（15634125也可）</li>
-      <li>卡农变体：17654321、或者17654325</li>
-      <li>经典流行：4536251：经典流行歌曲的和弦进行（稍微有点伤感）</li>
-      <li>经典流行变体：4436251</li>
-    </ul>
-    <h2>影视/史诗乐/系列</h2>
-    <ul>
-      <li>
-        《盗梦空间》：[2（向下转位1）-6（三级音上八度）-1-5（中上八度）]-[24（中替3上八度）15]，整个从C升成G调
-      </li>
-      <li>《盗梦空间》：Am-Em-G-D（一个b站评论）+C G B F#</li>
-    </ul>
-    <h2>终止式的和弦进行</h2>
-    <ul>
-      <li>变格终止：Dm7 -> G -> Fm -> C</li>
-      <li>阻碍终止：Dm7 -> G -> Am</li>
-      <li>借用和弦：Dm7 -> G -> Ab -> Bb -> C</li>
-    </ul>
-    <h2>和弦小技巧</h2>
-    <ul>
-      <li>转位（基操）</li>
-      <li>将三级音向上一个八度，国外和电音常用</li>
-      <li>
-        不同的套路和弦之间可以进行东拼西凑，比如卡农进行和经典流行进行拼接
-      </li>
-    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import PianoPlayer from "~/services/pianoPlayer";
-import Chord, {ChordExtension, ChordType} from "~/services/chord";
-import Note from "~/services/note";
 import {range} from "~/utils/math";
+import Note from "~/services/note";
+import Chord, {ChordExtension, ChordType} from "~/services/chord";
+import PianoPlayer from "~/services/pianoPlayer";
 
 /**
  * 当前选择的音阶音符
  */
 const currentScaleNote = ref<string>('C');
 
-const scaleNoteBefore = ref<string>('C');
-const scaleNoteAfter = ref<string>('D');
 
 /**
  * 试听和弦是否增加低音
@@ -352,9 +221,7 @@ function handleClickChordByArgs(number: number, chordType: ChordType, chordExten
 
 
 function login() {
-
-  window.location.href =
-      "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
+  window.location.href = "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
 }
 
 function exit() {

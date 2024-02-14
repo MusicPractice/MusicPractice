@@ -114,6 +114,9 @@ function handleKeyup(ev: KeyboardEvent) {
 
 onMounted(async () => {
   if (process.client) {
+    await PianoPlayer.loadAudio('default');
+    alert('加载完毕');
+
     document.addEventListener("keydown", handleKeydown);
     document.addEventListener("keyup", handleKeyup);
   }
