@@ -162,15 +162,15 @@ export default class Chord {
         return res;
     }
 
-    // @ts-ignore
     /**
      * 从和弦的字符串名字中解析出对象，目前仅支持三和弦
+     * 如果Maj这部分后缀没有识别出来，就当Maj大和弦处理
      * @param name {string} 例如：'D#Maj'
      */
     static fromName(name: string): Chord {
         const sliceIndex = name.includes("#") ? 2 : 1;
         const baseNote: string = name.slice(0, sliceIndex);
-        const chordType: ChordType = getChordTypeByName(name.slice(sliceIndex, name.length));
+        const chordType: ChordType = getChordTypeByName(name.slice(sliceIndex, name.length)) || 0;
 
         return new Chord(
             Note.fromNoteName(`${baseNote}3`),

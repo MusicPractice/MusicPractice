@@ -41,6 +41,35 @@ function handleClickChordByArgs(number: number, chordType: ChordType, chordExten
     )
   }
 }
+
+/**
+ * 判断当前这个和弦是否在调内
+ */
+function isCurChordInScale(i: number, enumNumberString: string): boolean {
+  return (
+      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+  ).getScale().includes(scaleNoteBefore.value)
+}
+
+/**
+ * 判断下一个调的和弦是否在调内
+ * @param i
+ * @param enumNumberString
+ */
+function isNextChordInScale(i: number, enumNumberString: string): boolean {
+  return (
+      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+  ).getScale().includes(scaleNoteAfter.value)
+}
+
+/**
+ * 渲染和弦名称
+ * @param i
+ * @param enumNumberString
+ */
+function renderNoteName(i: number, enumNumberString: string): string {
+  return new Note(3, i).getNoteNameFix() + ChordType[parseInt(enumNumberString)];
+}
 </script>
 
 <template>
@@ -75,16 +104,12 @@ function handleClickChordByArgs(number: number, chordType: ChordType, chordExten
         <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
           <button
               :class="{
-                  'ring': (
-                        new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                   ).getScale().includes(scaleNoteBefore),
-                  'bg-allogenes-dark': (
-                      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-                   ).getScale().includes(scaleNoteAfter),
+                  'ring': isCurChordInScale(i, enumNumberString),
+                  'bg-allogenes-dark': isNextChordInScale(i, enumNumberString),
                 }"
               class="m-1 w-16 ring-allogenes-deep normalChord rounded hover:scale-105 transition active:scale-95"
               @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
-            {{ new Note(3, i).getNoteNameFix() + ChordType[enumNumberString] }}
+            {{ renderNoteName(i, enumNumberString) }}
           </button>
         </template>
       </div>

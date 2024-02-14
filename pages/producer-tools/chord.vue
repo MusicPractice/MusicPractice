@@ -149,17 +149,11 @@
         <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
           <button
               :class="{
-                  'outline': (
-                          new Chord(
-                                new Note(3, i),
-                                parseInt(enumNumberString),
-                                ChordExtension.None
-                              )
-                      ).getScale().includes(currentScaleNote)
+                  'outline': isCurChordInScale(i, enumNumberString)
                 }"
               class="m-1 w-16 rounded hover:scale-105 transition active:scale-95"
               @click="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
-            {{ new Note(3, i).getNoteNameFix() + ChordType[enumNumberString] }}
+            {{ renderNoteName(i, enumNumberString) }}
           </button>
         </template>
       </div>
@@ -180,6 +174,23 @@ import PianoPlayer from "~/services/pianoPlayer";
  */
 const currentScaleNote = ref<string>('C');
 
+/**
+ * 判断当前这个和弦是否在调内
+ */
+function isCurChordInScale(i: number, enumNumberString: string): boolean {
+  return (
+      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+  ).getScale().includes(currentScaleNote.value)
+}
+
+/**
+ * 渲染和弦名称
+ * @param i
+ * @param enumNumberString
+ */
+function renderNoteName(i: number, enumNumberString: string): string {
+  return new Note(3, i).getNoteNameFix() + ChordType[parseInt(enumNumberString)];
+}
 
 /**
  * 试听和弦是否增加低音
