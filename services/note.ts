@@ -110,6 +110,15 @@ export default class Note {
   }
 
   /**
+   * @example f(1, 2) ==> C2,  f(3, 2) ==> E2
+   * @param n
+   * @param group
+   */
+  static fromNumberInCScale(n: number, group: number): Note {
+    return Note.fromNoteName('_CDEFGAB'[n] + group.toString());
+  }
+
+  /**
    * 将文件名格式转换成对象
    * @param fileName {string}
    */

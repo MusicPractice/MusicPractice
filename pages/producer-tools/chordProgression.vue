@@ -6,44 +6,17 @@
  *
  */
 
-import {numberToRoman} from "~/utils/strings";
-import PianoPlayer, {ChordPlayMode} from "~/services/pianoPlayer";
-import Chord, {ChordExtension, ChordType} from "~/services/chord";
-import Note from "~/services/note";
-import ChordProgression from "~/services/chordProgression";
-
-/**
- * 收集很多的和弦进行，用于计算数据
- */
-const chordProgressionDatabase: number[][] = [
-  [1, 2, 4, 5],
-  [1, 4, 5, 1],
-  [1, 4, 7, 1],
-  [1, 5, 4, 5],
-  [1, 5, 6, 4],
-  [1, 6, 2, 5],
-  [1, 6, 4, 5],
-
-  [2, 4, 5, 6],
-  [2, 5, 1, 6],
-  [2, 6, 1, 5],
-
-  [6, 5, 4, 3],
-  [6, 5, 4, 5],
-  [6, 5, 4, 1],
-  [6, 4, 1, 5],
-  [6, 4, 5, 1],
-  [6, 5, 3, 6],
-
-  [1, 5, 6, 3, 4, 1, 4, 5],
-  [1, 5, 6, 3, 4, 1, 2, 5],
-  [4, 5, 3, 6, 2, 5, 1],
-]
+import { numberToRoman } from '~/utils/strings';
+import PianoPlayer, { ChordPlayMode } from '~/services/pianoPlayer';
+import Chord from '~/services/chord';
+import Note from '~/services/note';
+import ChordProgressionComputer from '~/services/chordProgressionComputer';
+import { range } from '~/utils/math';
+import ChordProgression from '../../services/chordProgression';
+import { dictToMatrix } from '~/utils/itertools';
 
 
-const ChordRate: Record<number, [number, number][]> = ChordProgression.computeRateFromProgressionList(
-    chordProgressionDatabase
-);
+const ChordRate: Record<number, [number, number][]> = ChordProgressionComputer.chordRateTable;
 
 function handleClickChord(n: number) {
 
@@ -53,26 +26,12 @@ function handleClickChord(n: number) {
   // 加入数据
   inputChordArray.value.push(n);
   // 播放一下音频
-  let chordType = ChordType.Maj;
-  if ([1, 4, 5].includes(n)) {
-    chordType = ChordType.Maj;
-  } else if ([2, 3, 6].includes(n)) {
-    chordType = ChordType.Min;
-  } else if (n === 7) {
-    chordType = ChordType.Dim;
-  }
-
-
   PianoPlayer.playChord(
-      new Chord(
-          Note.fromNoteName('_CDEFGAB'[n] + '4'),
-          chordType,
-          ChordExtension.None
-      ),
-      true,
-      ChordPlayMode.Columnar
+    Chord.fromNumberInCScale(n, 4),
+    true,
+    ChordPlayMode.Columnar,
   );
-  PianoPlayer.playNote(Note.fromNoteName('_CDEFGAB'[n] + '2'));
+  PianoPlayer.playNote(Note.fromNumberInCScale(n, 2));
 }
 
 function handleDeleteChord() {
@@ -98,8 +57,8 @@ const inputChordArray = ref<number[]>([]);
       <div class="w-96 flex justify-center items-center bg-zinc-600 m-4 rounded overflow-hidden"
            v-for="currentNote in range(1, 8)" :key="currentNote">
         <div
-            @mousedown="handleClickChord(currentNote)"
-            class="w-16 h-full text-center flex justify-center items-center hover:bg-zinc-800 cursor-pointer transition">
+          @mousedown="handleClickChord(currentNote)"
+          class="w-16 h-full text-center flex justify-center items-center hover:bg-zinc-800 cursor-pointer transition">
             <span class="text-3xl">
             {{ numberToRoman(currentNote) }}
             </span>
@@ -125,32 +84,46 @@ const inputChordArray = ref<number[]>([]);
     <section>
       <h2 class="text-3xl leading-loose">和弦进行推荐</h2>
       <!--按钮区域-->
+      <h3>点击下面的按钮可以增删和弦序列</h3>
       <div class="flex justify-center">
         <button
-            class="w-16 h-16 flex justify-center items-center bg-zinc-600 m-4 rounded text-xl"
-            v-for="num in range(1, 8)"
-            @mousedown="handleClickChord(num)"
-            :key="`num-${num}`">
+          class="w-16 h-16 flex justify-center items-center bg-zinc-600 m-4 rounded text-xl"
+          v-for="num in range(1, 8)"
+          @mousedown="handleClickChord(num)"
+          :key="`num-${num}`">
           {{ numberToRoman(num) }}
         </button>
         <button
-            @click="handleDeleteChord"
-            class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
+          @click="handleDeleteChord"
+          class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
           ←
         </button>
         <button
-            @click="handleClearChord"
-            class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
+          @click="handleClearChord"
+          class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
           X
         </button>
       </div>
 
       <!--实际输入区域-->
+      <h3>以下区域为您的和弦输入序列</h3>
       <div class="flex flex-wrap items-center">
         <span
-            class="text-xl bg-zinc-600 m-2 p-2 rounded"
-            v-for="item in inputChordArray">{{ numberToRoman(item) }}</span>
+          class="text-xl bg-zinc-600 m-2 p-2 rounded"
+          v-for="item in inputChordArray">{{ numberToRoman(item) }}</span>
         <span class="text-xl bg-zinc-600 m-2 p-2 rounded">?</span>
+      </div>
+      <!--推荐信息-->
+      <h3>下一个和弦连接什么？算法穷举推荐指数</h3>
+      <div>
+
+        <div v-for="pair in dictToMatrix(ChordProgressionComputer.getNextChord(inputChordArray))"
+             :key="pair[0]"
+             class="flex">
+          <span class="font-bold mx-1">{{ numberToRoman(parseInt(pair[0])) }}</span>
+          <span class="w-16 flex items-center rounded px-1 text-sm">{{ (pair[1] * 100).toFixed(2) }}%</span>
+          <div class="bg-zinc-800" :style="{width: `${pair[1] * 1000}px`}"></div>
+        </div>
       </div>
     </section>
 

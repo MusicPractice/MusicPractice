@@ -33,6 +33,7 @@ function getChordTypeByName(name: string): ChordType | undefined {
       return undefined; // 如果名称不匹配，则返回 undefined
   }
 }
+
 /**
  * 和弦的附加音
  * 6、7、Maj7、add9、9、11、13
@@ -53,6 +54,9 @@ export enum ChordExtension {
 
 /**
  * 和弦
+ * 和弦只是概念上的和弦，内部仅仅包含根音，等等一些基础的和弦属性。
+ *
+ * 至于和弦是否发生转位，是柱式和弦还是分解和弦，这个在更高一层的播放类中，在播放时候才会处理。
  */
 export default class Chord {
   type: ChordType;
@@ -181,10 +185,71 @@ export default class Chord {
   }
 
   /**
+   * 构造一个C调和弦
+   * @param n {number}
+   * @param group {number}
+   */
+  static fromNumberInCScale(n: number, group: number): Chord {
+    let chordType: ChordType = ChordType.Maj;
+    if ([1, 4, 5].includes(n)) {
+      chordType = ChordType.Maj;
+    } else if ([2, 3, 6].includes(n)) {
+      chordType = ChordType.Min;
+    } else if (n === 7) {
+      chordType = ChordType.Dim;
+    }
+    return new Chord(
+      Note.fromNumberInCScale(n, group),
+      chordType,
+      ChordExtension.None,
+    );
+  }
+
+  /**
    * 获取和弦名称
    * @returns {string} 和弦名称，例如 'D#Maj'
    */
   getChordName(): string {
-    return `${this.root}${this.type}${this.extension}`;
+    return `${this.root.getNoteNameFix()}${ChordType[this.type]}${ChordExtension[this.extension] && ''}`;
+  }
+
+  /**
+   * 获取简化版本的和弦名称
+   * D#Maj ==> D#
+   * GMin ==> Gm
+   * CSus4 ==> Gsus
+   * BSus2 ==> Bsus2
+   */
+  getChordNameSimple(): string {
+    let chordType;
+    if (this.type === ChordType.Maj) {
+      chordType = '';
+    } else if (this.type === ChordType.Min) {
+      chordType = 'm';
+    } else if (this.type === ChordType.Sus4) {
+      chordType = 'sus';
+    } else if (this.type === ChordType.Sus2) {
+      chordType = 'sus2';
+    }
+    return `${this.root.getNoteNameFix()}${chordType}${ChordExtension[this.extension] && ''}`;
+  }
+
+  /**
+   * 如果姑且把这个和弦看成C调和弦，返回这个和弦是第几级和弦
+   * 例如 ＧMaj ===> 5
+   * EMin ===> 3
+   * 如果是 A#Maj CMin 这样的，会返回 -1，表示出错
+   */
+  getLevelAsCScale() {
+    const base = this.root.getNoteNameFix();
+    return '_CDEFGAB'.indexOf(base);
+  }
+
+  /**
+   * 比较自身和弦是否和另外一个和弦是等效的
+   * @param chord {Chord}
+   */
+  equal(chord: Chord): boolean {
+    return this.getChordName() === chord.getChordName();
   }
 }

@@ -1,62 +1,108 @@
+import Chord from '~/services/chord';
+
 /**
- * 和弦进行业务服务
+ * 一个和弦进行对象
+ * 就是一些和弦组成一个环形数组
  */
 export default class ChordProgression {
+  content: Chord[];
+
+  constructor(content: Chord[]) {
+    this.content = content;
+  }
+
   /**
-   * 根据一些和弦进行，来获取一个表格
-   * 用于表示所有和弦后面接什么的概率
-   *
-   * 计算每一个和弦后面接什么的可能性
-   * 计算方法：
-   * 遍历 1~7
-   *    寻找每个和弦中的 1
-   *       将 1 后面的数字加入到 结果集合
-   *       结果集合用来计算1 后面接什么的概率
-   *
-   * 最终结果结构 = {
-   *   1: {
-   *     5: 0.5  接5的概率
-   *     6: 0.2
-   *   }
-   * }
-   * 更改了，最终的结构 = {
-   *     1: [[5, 0.5], [6, 0.2]]  概率降序排列
-   * }
-   * @param progressionList
+   * 直接用 (1, 6, 4, 5) 构造一个C调和弦进行
+   * @param args
    */
-  static computeRateFromProgressionList(
-    progressionList: number[][],
-  ): Record<number, [number, number][]> {
-    const ChordRate: Record<number, [number, number][]> = {};
+  static fromNumbersInCScale(...args: number[]): ChordProgression {
+    const content: Chord[] = [];
+    for (let chordNumber of args) {
+      content.push(Chord.fromNumberInCScale(chordNumber, 3));
+    }
+    return new ChordProgression(content);
+  }
 
-    for (let currentNote = 1; currentNote <= 7; currentNote++) {
-      const setCount: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
-      const probabilities: [number, number][] = [];
+  /**
+   * 通过一个子和弦进行，获取这个和弦进行的下一个和弦，
+   * 如果没有匹配，则返回null
+   * 例如自己是 1234
+   * 传入的是 341，则返回2
+   * @param childChordProgression {ChordProgression}
+   */
+  getNextChord(childChordProgression: ChordProgression): Chord | null {
+    if (this.content.length <= childChordProgression.content.length) {
+      return null;
+    }
+    // 寻找子和弦进行在当前和弦进行中的位置
+    // 例如 1645 找 45 ，返回是4所在的下标 2
 
-      for (const chordProgression of progressionList) {
-        for (let j = 0; j < chordProgression.length; j++) {
-          if (chordProgression[j] === currentNote) {
-            let nextIdx = j === chordProgression.length - 1 ? 0 : j + 1;
-            setCount[chordProgression[nextIdx]]++;
-          }
+    let index = -1;
+    for (let i = 0; i < this.content.length; i++) {
+      // 遍历每一个自身的起始位置，逐个贴合比较
+      let isSame = true;
+      for (let j = 0; j < childChordProgression.content.length; j++) {
+        if (
+          !this.content[(i + j) % this.content.length].equal(
+            childChordProgression.content[j],
+          )
+        ) {
+          isSame = false;
+          break;
         }
       }
-
-      let total = 0;
-      for (let note = 1; note <= 7; note++) {
-        total += setCount[note];
+      if (isSame) {
+        index = i;
+        break;
       }
-
-      for (let note = 1; note <= 7; note++) {
-        const probability = total === 0 ? 0 : setCount[note] / total;
-        probabilities.push([note, probability]);
-      }
-
-      // 按概率降序排序
-      probabilities.sort((a, b) => b[1] - a[1]);
-
-      ChordRate[currentNote] = probabilities;
     }
-    return ChordRate;
+
+    // 如果找到了子和弦进行在当前和弦进行中的位置，则返回下一个和弦
+    if (index !== -1) {
+      return this.content[
+        (index + childChordProgression.content.length) % this.content.length
+      ];
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * 比较自己是否和另一个和弦进行是等效的
+   * 例如 1645 === 4516
+   * @param other {ChordProgression}
+   */
+  equal(other: ChordProgression): boolean {
+    // 长度都不一样，肯定不一样
+    if (this.content.length !== other.content.length) {
+      return false;
+    }
+    // 长度一样，是环形的，从每个起始点开始比较
+    for (let i = 0; i < this.content.length; i++) {
+      let isEqual = true;
+      for (let j = 0; j < this.content.length; j++) {
+        if (
+          !this.content[j].equal(other.content[(i + j) % this.content.length])
+        ) {
+          isEqual = false;
+          break;
+        }
+      }
+      if (isEqual) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  toString(): string {
+    let res = '';
+    for (let i = 0; i < this.content.length; i++) {
+      res += this.content[i].getChordNameSimple();
+      if (i !== this.content.length - 1) {
+        res += ' - ';
+      }
+    }
+    return res;
   }
 }
