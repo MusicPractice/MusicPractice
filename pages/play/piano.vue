@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import PianoPlayer, {Timber} from "~/services/pianoPlayer";
+import PianoPlayer, {ChordPlayMode, Timber} from "~/services/pianoPlayer";
 import Note from "~/services/note";
 import Chord from "~/services/chord";
 
@@ -111,7 +111,7 @@ function handleKeydown(ev: KeyboardEvent) {
         chord = Chord.fromName('BDim');
         break;
     }
-    PianoPlayer.playChord(chord, true);
+    PianoPlayer.playChord(chord, true, chordPlayMode.value);
   }
 
 
@@ -192,6 +192,7 @@ onUnmounted(() => {
 });
 
 const currentTimber = ref<string>("defaultTimber");
+const chordPlayMode = ref<ChordPlayMode>(ChordPlayMode.Columnar);
 
 async function handleChangeTimber() {
   console.log(currentTimber.value);
@@ -211,12 +212,22 @@ async function handleChangeTimber() {
     </template>
 
     <template v-else>
-      <select @change="handleChangeTimber" v-model="currentTimber"
-              class="absolute right-2 top-2 ring rounded ring-allogenes-deep">
-        <option value="defaultTimber">默认音源</option>
-        <option value="genshinPoetry">原神-风物之诗琴</option>
-        <option value="genshinMirror">原神-镜花之琴</option>
-      </select>
+      <div class="absolute top-0 w-96 flex items-center">
+        <select @change="handleChangeTimber" v-model="currentTimber"
+                class="ring rounded">
+          <option value="defaultTimber">默认音源</option>
+          <option value="genshinPoetry">原神-风物之诗琴</option>
+          <option value="genshinMirror">原神-镜花之琴</option>
+        </select>
+        <select v-model="chordPlayMode"
+                class="ring rounded">
+          <option :value="ChordPlayMode.Columnar">柱式和弦</option>
+          <option :value="ChordPlayMode.rootFifthRootThree">根五根三</option>
+          <option :value="ChordPlayMode.rootThreeFifthThree">1232</option>
+          <option :value="ChordPlayMode.LargeColumnar">中上翻</option>
+        </select>
+      </div>
+
       <div class="keybind genshin" v-if="keybind === 'genshin'">
         <div class="row" v-for="row in keysGenshin">
           <div class="col" v-for="col in row" :class="classesGenshin[col]">
