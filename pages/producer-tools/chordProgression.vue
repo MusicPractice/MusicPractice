@@ -5,12 +5,157 @@
  * 输入 CMaj，后面自动接上F，G，G/b，Dmin，Am等等
  *
  */
+
+import {numberToRoman} from "~/utils/strings";
+import PianoPlayer, {ChordPlayMode} from "~/services/pianoPlayer";
+import Chord, {ChordExtension, ChordType} from "~/services/chord";
+import Note from "~/services/note";
+import ChordProgression from "~/services/chordProgression";
+
+/**
+ * 收集很多的和弦进行，用于计算数据
+ */
+const chordProgressionDatabase: number[][] = [
+  [1, 2, 4, 5],
+  [1, 4, 5, 1],
+  [1, 4, 7, 1],
+  [1, 5, 4, 5],
+  [1, 5, 6, 4],
+  [1, 6, 2, 5],
+  [1, 6, 4, 5],
+
+  [2, 4, 5, 6],
+  [2, 5, 1, 6],
+  [2, 6, 1, 5],
+
+  [6, 5, 4, 3],
+  [6, 5, 4, 5],
+  [6, 5, 4, 1],
+  [6, 4, 1, 5],
+  [6, 4, 5, 1],
+  [6, 5, 3, 6],
+
+  [1, 5, 6, 3, 4, 1, 4, 5],
+  [1, 5, 6, 3, 4, 1, 2, 5],
+  [4, 5, 3, 6, 2, 5, 1],
+]
+
+
+const ChordRate: Record<number, [number, number][]> = ChordProgression.computeRateFromProgressionList(
+    chordProgressionDatabase
+);
+
+function handleClickChord(n: number) {
+
+  if (n > 7 || n < 1) {
+    return;
+  }
+  // 加入数据
+  inputChordArray.value.push(n);
+  // 播放一下音频
+  let chordType = ChordType.Maj;
+  if ([1, 4, 5].includes(n)) {
+    chordType = ChordType.Maj;
+  } else if ([2, 3, 6].includes(n)) {
+    chordType = ChordType.Min;
+  } else if (n === 7) {
+    chordType = ChordType.Dim;
+  }
+
+
+  PianoPlayer.playChord(
+      new Chord(
+          Note.fromNoteName('_CDEFGAB'[n] + '4'),
+          chordType,
+          ChordExtension.None
+      ),
+      true,
+      ChordPlayMode.Columnar
+  );
+  PianoPlayer.playNote(Note.fromNoteName('_CDEFGAB'[n] + '2'));
+}
+
+function handleDeleteChord() {
+  if (inputChordArray.value.length > 0) {
+    inputChordArray.value.pop();
+  }
+}
+
+function handleClearChord() {
+  inputChordArray.value = [];
+}
+
+const inputChordArray = ref<number[]>([]);
+
 </script>
 
 <template>
   <div class="ChordProgression overflow-auto p-4">
-    <h1>和弦进行</h1>
+    <h1 class="text-center text-3xl">和弦进行</h1>
+    <h2>统计可能性</h2>
+    <p class="text-center">点击和弦可以听声音，若没有声音可以先去“键盘弹钢琴”界面加载音源</p>
+    <section class="flex flex-wrap justify-center">
+      <div class="w-96 flex justify-center items-center bg-zinc-600 m-4 rounded overflow-hidden"
+           v-for="currentNote in range(1, 8)" :key="currentNote">
+        <div
+            @mousedown="handleClickChord(currentNote)"
+            class="w-16 h-full text-center flex justify-center items-center hover:bg-zinc-800 cursor-pointer transition">
+            <span class="text-3xl">
+            {{ numberToRoman(currentNote) }}
+            </span>
+        </div>
+        <div class="flex-1">
+          <div @mousedown="handleClickChord(pair[0])"
+               v-for="pair in ChordRate[currentNote]"
+               class="flex items-center hover:bg-zinc-700 cursor-pointer transition">
+            <template v-if="pair[1] > 0.01">
+              <span class="mx-2">{{ numberToRoman(pair[0]) }}</span>
+              <span class="inline-block bg-zinc-500 rounded text-xs pl-1 truncate hover:text-clip"
+                    :style="{width: `${pair[1] * 100 * 0.95}%`}">
+                {{ (pair[1] * 100).toFixed(1) }}%
+              </span>
+            </template>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p class="text-center">上图中给出了每个和弦后面最可能接什么和弦的可能性，并降序排序</p>
+
+
+    <section>
+      <h2 class="text-3xl leading-loose">和弦进行推荐</h2>
+      <!--按钮区域-->
+      <div class="flex justify-center">
+        <button
+            class="w-16 h-16 flex justify-center items-center bg-zinc-600 m-4 rounded text-xl"
+            v-for="num in range(1, 8)"
+            @mousedown="handleClickChord(num)"
+            :key="`num-${num}`">
+          {{ numberToRoman(num) }}
+        </button>
+        <button
+            @click="handleDeleteChord"
+            class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
+          ←
+        </button>
+        <button
+            @click="handleClearChord"
+            class="w-16 h-16 flex justify-center items-center bg-red-800 m-4 rounded text-xl">
+          X
+        </button>
+      </div>
+
+      <!--实际输入区域-->
+      <div class="flex flex-wrap items-center">
+        <span
+            class="text-xl bg-zinc-600 m-2 p-2 rounded"
+            v-for="item in inputChordArray">{{ numberToRoman(item) }}</span>
+        <span class="text-xl bg-zinc-600 m-2 p-2 rounded">?</span>
+      </div>
+    </section>
+
     <h2>大调系列</h2>
+
     <ul>
       <li>1245：刚学Cubase的时候老师给推荐的和弦进行</li>
       <li>
@@ -40,7 +185,7 @@
         6415
         641(sus2)5：悲伤感小调（暗夜花火），事实上，好多的较为悲伤的歌曲都使用了这个和弦进行
       </li>
-      <li>6415：《杀破狼》</li>
+      <li>6415：Fade、《杀破狼》</li>
       <li>6533 6543：信息茧房</li>
       <li>6543 234(2大)：《流星云》</li>
       <li>6536：残梦霓虹的《好戏开场》弦乐断奏和弦，张力</li>
@@ -62,7 +207,7 @@
         6524(最好降成Bb调)：（凄凉悲伤）一个老外教的，要把第三音向上翻阅八度，然后前三个注释和弦都补充最后一个和弦的最高音
       </li>
       <li>
-        G D A B
+        G D A Bm
         （G调的小忧伤）：三音上翻八度，前两个小节温馨温暖，后两个小节突然忧伤
       </li>
     </ul>

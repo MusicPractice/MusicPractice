@@ -1,7 +1,7 @@
 <template>
   <app-alert/>
   <NavBar/>
-  <NuxtPage class="bg-stone-800 text-stone-200"/>
+  <NuxtPage class="bg-zinc-700 text-stone-200"/>
 </template>
 
 <script lang="ts" setup>

@@ -61,7 +61,7 @@ const links: Array<NavItem> = [
 </script>
 
 <template>
-  <div class="w-48 bg-stone-900 text-stone-200 flex flex-col shadow-inner ring ring-blue-400 shadow-allogenes-deep relative">
+  <div class="w-48 bg-stone-800 text-stone-200 flex flex-col shadow-inner ring ring-blue-400 shadow-allogenes-deep relative">
     <h1 class="text-xl font-bold pl-2 py-4 mb-4">个人音乐小站</h1>
     <template v-for="link in links" :key="link.to">
       <section v-if="link.child"

@@ -1,3 +1,1 @@
-export function mpAlert() {
-
-}
+export function mpAlert() {}
