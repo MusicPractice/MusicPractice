@@ -55,7 +55,7 @@ export default class ChordProgressionComputer {
    *     7: [...],
    * }
    */
-  public static chordRateTable: Record<number, [number, number][]> =
+  public static chordRateTable: Record<number, [string, number][]> =
     this.computeRateFromChordMatrix();
 
   /**
@@ -63,10 +63,10 @@ export default class ChordProgressionComputer {
    */
   private static computeRateFromChordMatrix(): Record<
     number,
-    [number, number][]
+    [string, number][]
   > {
     // 最终返回的结果先定义好
-    const ChordRate: Record<number, [number, number][]> = {};
+    const ChordRate: Record<number, [string, number][]> = {};
 
     for (let currentNote = 1; currentNote <= 7; currentNote++) {
       const setCount: Record<number, number> = {

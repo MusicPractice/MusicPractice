@@ -20,13 +20,14 @@ export default class ChordProgression {
   public static fromNumbersInCScale(...args: number[]): ChordProgression {
     const content: Chord[] = [];
     for (let chordNumber of args) {
-      content.push(Chord.fromNumberInCScale(chordNumber, 3));
+      content.push(Chord.fromNumberInCMajorScale(chordNumber, 3));
     }
     return new ChordProgression(content);
   }
 
   /**
    * 通过一个子和弦进行，获取这个和弦进行的下一个和弦，
+   * todo，建议优化成直接抛出异常。在上层捕获异常。
    * 如果没有匹配，则返回 null
    * 例如自己是 1234
    * 传入的是 341，则返回2
@@ -45,7 +46,7 @@ export default class ChordProgression {
       let isSame = true;
       for (let j = 0; j < childChordProgression.content.length; j++) {
         if (
-          !this.content[(i + j) % this.content.length].equal(
+          !this.content[(i + j) % this.content.length].isEqual(
             childChordProgression.content[j],
           )
         ) {
@@ -84,7 +85,7 @@ export default class ChordProgression {
       let isEqual = true;
       for (let j = 0; j < this.content.length; j++) {
         if (
-          !this.content[j].equal(other.content[(i + j) % this.content.length])
+          !this.content[j].isEqual(other.content[(i + j) % this.content.length])
         ) {
           isEqual = false;
           break;

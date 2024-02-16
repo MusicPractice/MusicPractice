@@ -38,17 +38,14 @@ export enum ChordExtension {
  * 至于和弦是否发生转位，是柱式和弦还是分解和弦，这个在更高一层的播放类中，在播放时候才会处理。
  */
 export default class Chord {
-  type: ChordType;
-  extension: ChordExtension;
-  root: Note; // 根音
 
   /**
    * 创建一个和弦对象
-   * @param type {ChordType} 和弦类型
    * @param extension {ChordExtension} 和弦扩展
+   * @param type {ChordType} 和弦类型
    * @param root {Note} 根音
    */
-  constructor(root: Note, type: ChordType, extension: ChordExtension) {
+  constructor(public root: Note, public type: ChordType, public extension: ChordExtension) {
     this.root = root;
     this.type = type;
     this.extension = extension;
@@ -153,8 +150,7 @@ export default class Chord {
   static fromName(name: string): Chord {
     const sliceIndex = name.includes('#') ? 2 : 1;
     const baseNote: string = name.slice(0, sliceIndex);
-    const chordType: ChordType =
-      ChordType[name.slice(sliceIndex, name.length)] || 0;
+    const chordType: ChordType = ChordType[name.slice(sliceIndex, name.length)] || 0;
 
     return new Chord(
       Note.fromNoteName(`${baseNote}2`),
@@ -168,7 +164,7 @@ export default class Chord {
    * @param n {number}
    * @param group {number}
    */
-  static fromNumberInCScale(n: number, group: number): Chord {
+  static fromNumberInCMajorScale(n: number, group: number): Chord {
     let chordType: ChordType = ChordType.Maj;
     if ([1, 4, 5].includes(n)) {
       chordType = ChordType.Maj;
@@ -228,7 +224,7 @@ export default class Chord {
    * 比较自身和弦是否和另外一个和弦是等效的
    * @param chord {Chord}
    */
-  equal(chord: Chord): boolean {
+  isEqual(chord: Chord): boolean {
     return this.getChordName() === chord.getChordName();
   }
 }

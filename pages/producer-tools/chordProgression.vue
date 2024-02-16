@@ -9,7 +9,7 @@ import { range } from '~/utils/math';
 import { dictToMatrix } from '~/utils/itertools';
 
 
-const chordRate: Record<number, [number, number][]> = ChordProgressionComputer.chordRateTable;
+const chordRate: Record<number, [string, number][]> = ChordProgressionComputer.chordRateTable;
 
 function handleClickChord(n: number | string) {
   if (typeof n === 'string') {
@@ -22,7 +22,7 @@ function handleClickChord(n: number | string) {
   inputChordArray.value.push(n);
   // 播放一下音频
   PianoPlayer.playChord(
-    Chord.fromNumberInCScale(n, 3),
+    Chord.fromNumberInCMajorScale(n, 3),
     true,
     ChordPlayMode.Columnar,
   );
@@ -47,6 +47,7 @@ const inputChordArray = ref<number[]>([]);
   <div class="ChordProgression overflow-auto p-4">
     <h1 class="text-center text-3xl">和弦进行</h1>
     <h2>统计可能性</h2>
+    <!-- todo v-for遍历对象的key来渲染 -->
     <p class="text-center">点击和弦可以听声音，若没有声音可以先去“键盘弹钢琴”界面加载音源</p>
     <section class="flex flex-wrap justify-center">
       <div class="w-96 flex justify-center items-center bg-zinc-600 m-4 rounded overflow-hidden"
