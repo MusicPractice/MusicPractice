@@ -40,9 +40,6 @@
 </template>
 
 <script setup lang="ts">
-
-import MpButton from '~/components/common/mp-button.vue';
-
 const majorScale = '大调';
 const minorScale = '小调';
 const fourFourTime = '4/4';

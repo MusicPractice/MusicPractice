@@ -105,8 +105,8 @@
 
     <h1>和弦试听</h1>
     <div>
-      <span>和弦根音</span>
-      <select>
+      <span>当前选择的和弦根音：</span>
+      <select v-model="currentScaleNote">
         <option v-for="i in range(0, 12)" :key="`root-${i}`">
           {{ Note.SCALE_LIST[i] }}
         </option>
@@ -115,14 +115,13 @@
     <!--遍历所有附加音种类-->
     <template v-for="(enumNumberString) in Object.keys(ChordExtension)" :key="`${enumNumberString}`">
       <div v-if="typeof ChordExtension[enumNumberString] === 'string'" class="flex">
-
         <h3 class="w-16 h-16">{{ ChordExtension[enumNumberString] }}</h3>
         <!-- 遍历所有12音 -->
         <span class="flex" v-for="chordTypeStr in Object.keys(ChordType)" :key="`${chordTypeStr}`">
           <mp-button
-              v-if="typeof ChordType[chordTypeStr] === 'string'"
-              class="m-1 w-32 ring rounded hover:scale-105 transition active:scale-95"
-              @mousedown="handleClickChordByArgs(1, parseInt(chordTypeStr), parseInt(enumNumberString))">
+            v-if="typeof ChordType[chordTypeStr] === 'string'"
+            class="m-1 w-32"
+            @mousedown="handleClickChordByArgs(currentScaleNote, parseInt(chordTypeStr), parseInt(enumNumberString))">
             {{ ChordType[chordTypeStr] + '/' + ChordExtension[enumNumberString] }}
           </mp-button>
         </span>
@@ -133,11 +132,11 @@
 </template>
 
 <script setup lang="ts">
-import {range} from "~/utils/math";
-import Note from "~/services/note";
-import Chord, {ChordExtension, ChordType} from "~/services/chord";
-import PianoPlayer, {Timber} from "~/services/pianoPlayer";
-import MpButton from "~/components/common/mp-button.vue";
+import { range } from '~/utils/math';
+import Note from '~/services/note';
+import Chord, { ChordExtension, ChordType } from '~/services/chord';
+import PianoPlayer, { ChordPlayMode, Timber } from '~/services/pianoPlayer';
+import MpButton from '~/components/common/mp-button.vue';
 
 /**
  * 当前是否是正在加载音源的阶段
@@ -158,44 +157,39 @@ const currentScaleNote = ref<string>('C');
 /**
  * 试听和弦是否增加低音
  */
-const isAddBass = ref<boolean>(false);
+const isAddBass = ref<boolean>(true);
 
 
 /**
  * 绑定不同的点击和弦按钮
- * @param number
+ * @param chordNote
  * @param chordType
  * @param chordExtension
  */
-function handleClickChordByArgs(number: number, chordType: ChordType, chordExtension: ChordExtension) {
-  while (number > 12) {
-    number -= 12;
-  }
+function handleClickChordByArgs(chordNote: string, chordType: ChordType, chordExtension: ChordExtension) {
   PianoPlayer.playChord(
-      new Chord(
-          new Note(3, number),
-          chordType,
-          chordExtension
-      ),
-      true,
+    new Chord(
+      Note.fromNoteName(`${chordNote}3`),
+      chordType,
+      chordExtension,
+    ),
+    true,
+    ChordPlayMode.Columnar,
   );
   if (isAddBass.value) {
     PianoPlayer.playNote(
-        new Note(
-            0,
-            number
-        )
-    )
+      Note.fromNoteName(`${chordNote}1`),
+    );
   }
 }
 
 
 function login() {
-  window.location.href = "https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1";
+  window.location.href = 'https://github.com/login/oauth/authorize?client_id=7122f296ba2602fb0ff1';
 }
 
 function exit() {
-  localStorage.removeItem("token");
+  localStorage.removeItem('token');
   window.location.reload();
 }
 </script>

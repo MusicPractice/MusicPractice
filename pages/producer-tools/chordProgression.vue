@@ -1,10 +1,4 @@
 <script setup lang="ts">
-/**
- * 小工具：
- * 自动推荐一个能用的和弦进行
- * 输入 CMaj，后面自动接上F，G，G/b，Dmin，Am等等
- *
- */
 
 import { numberToRoman } from '~/utils/strings';
 import PianoPlayer, { ChordPlayMode } from '~/services/pianoPlayer';

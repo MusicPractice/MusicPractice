@@ -7,7 +7,6 @@
           :key="i"
           class="ring m-2"
           @click="handleClickTimbres(key)">
-
         {{ key }}
       </mp-button>
     </div>

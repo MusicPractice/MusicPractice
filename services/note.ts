@@ -107,6 +107,13 @@ export default class Note {
   }
 
   /**
+   * ========
+   * 以下都是静态工厂方法
+   * ========
+   */
+
+
+  /**
    * 从音名格式创建音符对象
    * @param noteName {string} 音名格式，例如 'C4', 'C#4'
    */

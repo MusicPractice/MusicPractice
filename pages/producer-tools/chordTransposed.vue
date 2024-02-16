@@ -1,13 +1,11 @@
 <script setup lang="ts">
 /**
  * 增加一个点击箭头的声音
- *
- *
  */
-import Note from "~/services/note";
-import Chord, {ChordExtension, ChordType} from "~/services/chord";
-import {range} from "~/utils/math";
-import PianoPlayer, {ChordPlayMode, Timber} from "~/services/pianoPlayer";
+import Note from '~/services/note';
+import Chord, { ChordExtension, ChordType } from '~/services/chord';
+import { range } from '~/utils/math';
+import PianoPlayer, { ChordPlayMode, Timber } from '~/services/pianoPlayer';
 
 const scaleNoteBefore = ref<string>('C');
 const scaleNoteAfter = ref<string>('D');
@@ -80,11 +78,9 @@ function isCurChordInScale(i: number, enumNumberString: string): boolean {
   if (cachedResults[key]) {
     return cachedResults[key];
   }
-  const res = (
-      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+  return (
+    new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
   ).getScale().includes(scaleNoteBefore.value);
-  // cachedResults[key] = res;
-  return res;
 }
 
 /**
@@ -97,11 +93,9 @@ function isNextChordInScale(i: number, enumNumberString: string): boolean {
   if (cachedResults[key]) {
     return cachedResults[key];
   }
-  const res = (
-      new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
-  ).getScale().includes(scaleNoteAfter.value)
-  // cachedResults[key] = res;
-  return res;
+  return (
+    new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+  ).getScale().includes(scaleNoteAfter.value);
 }
 
 function getChordClass(i: number, enumNumberString: string): Record<string, boolean> {
