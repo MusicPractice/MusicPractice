@@ -1,4 +1,7 @@
-export const numberToRoman = (n: number): string => {
+export const numberToRoman = (n: number | string): string => {
+  if (typeof n === 'string') {
+    n = parseInt(n);
+  }
   switch (n) {
     case 1:
       return 'Ⅰ';

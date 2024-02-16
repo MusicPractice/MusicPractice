@@ -12,14 +12,15 @@ import Chord from '~/services/chord';
 import Note from '~/services/note';
 import ChordProgressionComputer from '~/services/chordProgressionComputer';
 import { range } from '~/utils/math';
-import ChordProgression from '../../services/chordProgression';
 import { dictToMatrix } from '~/utils/itertools';
 
 
-const ChordRate: Record<number, [number, number][]> = ChordProgressionComputer.chordRateTable;
+const chordRate: Record<number, [number, number][]> = ChordProgressionComputer.chordRateTable;
 
-function handleClickChord(n: number) {
-
+function handleClickChord(n: number | string) {
+  if (typeof n === 'string') {
+    n = parseInt(n);
+  }
   if (n > 7 || n < 1) {
     return;
   }
@@ -27,11 +28,11 @@ function handleClickChord(n: number) {
   inputChordArray.value.push(n);
   // 播放一下音频
   PianoPlayer.playChord(
-    Chord.fromNumberInCScale(n, 4),
+    Chord.fromNumberInCScale(n, 3),
     true,
     ChordPlayMode.Columnar,
   );
-  PianoPlayer.playNote(Note.fromNumberInCScale(n, 2));
+  PianoPlayer.playNote(Note.fromNumberInCMajorScale(n, 2));
 }
 
 function handleDeleteChord() {
@@ -65,7 +66,7 @@ const inputChordArray = ref<number[]>([]);
         </div>
         <div class="flex-1">
           <div @mousedown="handleClickChord(pair[0])"
-               v-for="pair in ChordRate[currentNote]"
+               v-for="pair in chordRate[currentNote]"
                class="flex items-center hover:bg-zinc-700 cursor-pointer transition">
             <template v-if="pair[1] > 0.01">
               <span class="mx-2">{{ numberToRoman(pair[0]) }}</span>

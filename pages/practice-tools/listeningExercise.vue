@@ -86,7 +86,7 @@ function handleGuess() {
     if (res) {
       alert('恭喜你，猜对了！');
     } else {
-      alert(`很遗憾，猜错了！答案是${RandomFrequent.freq}`);
+      alert(`很遗憾，猜错了！答案是${RandomFrequent.frequent}`);
     }
   }
 }

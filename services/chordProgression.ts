@@ -2,20 +2,22 @@ import Chord from '~/services/chord';
 
 /**
  * 一个和弦进行对象
- * 就是一些和弦组成一个环形数组
+ * 就是一些和弦组成一个数组
+ * 代码层面是数组，但逻辑上是环形的。
+ * 因此在equal判断等一些逻辑上会看成 环形数组 来判断。
  */
 export default class ChordProgression {
   content: Chord[];
 
-  constructor(content: Chord[]) {
+  private constructor(content: Chord[]) {
     this.content = content;
   }
 
   /**
-   * 直接用 (1, 6, 4, 5) 构造一个C调和弦进行
+   * 直接用 f(1, 6, 4, 5) 构造一个C调和弦进行
    * @param args
    */
-  static fromNumbersInCScale(...args: number[]): ChordProgression {
+  public static fromNumbersInCScale(...args: number[]): ChordProgression {
     const content: Chord[] = [];
     for (let chordNumber of args) {
       content.push(Chord.fromNumberInCScale(chordNumber, 3));
@@ -25,12 +27,12 @@ export default class ChordProgression {
 
   /**
    * 通过一个子和弦进行，获取这个和弦进行的下一个和弦，
-   * 如果没有匹配，则返回null
+   * 如果没有匹配，则返回 null
    * 例如自己是 1234
    * 传入的是 341，则返回2
    * @param childChordProgression {ChordProgression}
    */
-  getNextChord(childChordProgression: ChordProgression): Chord | null {
+  public getNextChord(childChordProgression: ChordProgression): Chord | null {
     if (this.content.length <= childChordProgression.content.length) {
       return null;
     }
@@ -72,7 +74,7 @@ export default class ChordProgression {
    * 例如 1645 === 4516
    * @param other {ChordProgression}
    */
-  equal(other: ChordProgression): boolean {
+  public equal(other: ChordProgression): boolean {
     // 长度都不一样，肯定不一样
     if (this.content.length !== other.content.length) {
       return false;

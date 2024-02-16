@@ -13,27 +13,6 @@ export enum ChordType {
   Fifth, // 纯五度和弦
 }
 
-function getChordTypeByName(name: string): ChordType | undefined {
-  switch (name) {
-    case 'Maj':
-      return ChordType.Maj;
-    case 'Min':
-      return ChordType.Min;
-    case 'Dim':
-      return ChordType.Dim;
-    case 'Aug':
-      return ChordType.Aug;
-    case 'Sus2':
-      return ChordType.Sus2;
-    case 'Sus4':
-      return ChordType.Sus4;
-    case 'Fifth':
-      return ChordType.Fifth;
-    default:
-      return undefined; // 如果名称不匹配，则返回 undefined
-  }
-}
-
 /**
  * 和弦的附加音
  * 6、7、Maj7、add9、9、11、13
@@ -84,7 +63,7 @@ export default class Chord {
     const chordNotes = this.getNotes();
     const scales: string[][] = [];
     for (const note of chordNotes) {
-      scales.push(note.getScale());
+      scales.push(note.getTonality());
     }
     // 遍历每一个音阶，看看是不是每一个子数组都包含
     return scales.reduce((prev, curr) => {
@@ -175,10 +154,10 @@ export default class Chord {
     const sliceIndex = name.includes('#') ? 2 : 1;
     const baseNote: string = name.slice(0, sliceIndex);
     const chordType: ChordType =
-      getChordTypeByName(name.slice(sliceIndex, name.length)) || 0;
+      ChordType[name.slice(sliceIndex, name.length)] || 0;
 
     return new Chord(
-      Note.fromNoteName(`${baseNote}3`),
+      Note.fromNoteName(`${baseNote}2`),
       chordType,
       ChordExtension.None,
     );
@@ -199,7 +178,7 @@ export default class Chord {
       chordType = ChordType.Dim;
     }
     return new Chord(
-      Note.fromNumberInCScale(n, group),
+      Note.fromNumberInCMajorScale(n, group),
       chordType,
       ChordExtension.None,
     );
@@ -210,7 +189,7 @@ export default class Chord {
    * @returns {string} 和弦名称，例如 'D#Maj'
    */
   getChordName(): string {
-    return `${this.root.getNoteNameFix()}${ChordType[this.type]}${ChordExtension[this.extension] && ''}`;
+    return `${this.root.getNoteName(true)}${ChordType[this.type]}${ChordExtension[this.extension] && ''}`;
   }
 
   /**
@@ -231,7 +210,7 @@ export default class Chord {
     } else if (this.type === ChordType.Sus2) {
       chordType = 'sus2';
     }
-    return `${this.root.getNoteNameFix()}${chordType}${ChordExtension[this.extension] && ''}`;
+    return `${this.root.getNoteName(true)}${chordType}${ChordExtension[this.extension] && ''}`;
   }
 
   /**
@@ -241,7 +220,7 @@ export default class Chord {
    * 如果是 A#Maj CMin 这样的，会返回 -1，表示出错
    */
   getLevelAsCScale() {
-    const base = this.root.getNoteNameFix();
+    const base = this.root.getNoteName(true);
     return '_CDEFGAB'.indexOf(base);
   }
 

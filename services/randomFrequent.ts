@@ -5,7 +5,7 @@ import { randint } from '~/utils/random';
  * 全部成员静态，当成一个全局对象来使用
  */
 export default class RandomFrequent {
-  static freq: number = randint(27, 4186);
+  static frequent: number = randint(27, 4186);
   static history: Array<{ answer: number; guess: number; result: boolean }> =
     [];
   static correctCount: number = 0; // 正确次数
@@ -35,7 +35,7 @@ export default class RandomFrequent {
     const oscillator = this.audioContext.createOscillator();
 
     // 设置频率
-    oscillator.frequency.value = this.freq;
+    oscillator.frequency.value = this.frequent;
 
     // 将 OscillatorNode 连接到音频目标
     oscillator.connect(this.audioContext.destination);
@@ -51,7 +51,7 @@ export default class RandomFrequent {
    * 随机刷新频率
    */
   static update(): void {
-    this.freq = randint(100, 1000);
+    this.frequent = randint(100, 1000);
     this.isValid = false;
   }
 
@@ -61,10 +61,10 @@ export default class RandomFrequent {
    */
   static valid(n: number): boolean {
     this.isValid = true;
-    const res = n === this.freq;
+    const res = n === this.frequent;
     if (res) this.correctCount++;
     this.history.push({
-      answer: this.freq,
+      answer: this.frequent,
       guess: n,
       result: res,
     });

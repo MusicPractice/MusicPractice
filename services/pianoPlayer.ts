@@ -35,9 +35,19 @@ export default class PianoPlayer {
 
   /**
    * 更改音色
+   * todo 还没做好
    */
   static async changeTimber(newTimber: Timber) {
     await this.loadAudio(newTimber);
+  }
+
+  /**
+   * 将音符对象转化成文件名 '3_05' ，不带'.mp3'后缀
+   * @param note
+   * @private
+   */
+  private static getNoteFileName(note: Note): string {
+    return `${note.getOctave}_${note.getIndex.toString().padStart(2, '0')}`;
   }
 
   /**
@@ -50,7 +60,7 @@ export default class PianoPlayer {
     const notes = [];
     for (let group = 0; group < 7; group++) {
       for (let noteI = 1; noteI <= 12; noteI++) {
-        notes.push(new Note(group, noteI).getFileName());
+        notes.push(this.getNoteFileName(new Note(group, noteI)));
       }
     }
 
@@ -82,11 +92,11 @@ export default class PianoPlayer {
    * 播放一个音符的声音
    */
   static playNote(note: Note) {
-    const audio = this.audioFiles[note.getFileName()];
+    const audio = this.audioFiles[this.getNoteFileName(note)];
     if (audio) {
       audio.play();
     } else {
-      console.error(`找不到音符 ${note.getFileName()} 的音频文件`);
+      console.error(`找不到音符 ${this.getNoteFileName(note)} 的音频文件`);
     }
   }
 
@@ -115,7 +125,6 @@ export default class PianoPlayer {
     const columnarPlay = () => {
       console.log('柱式和弦');
       for (let note of chordNotes) {
-        console.log(note.getNoteName(), note.group);
         // 自动转位的原理，一旦和弦音高于基音一个八度，就降低一个八度。
         if (autoTrans && note.group > baseNoteGroup) {
           note = note.transpose(-12);
@@ -162,7 +171,6 @@ export default class PianoPlayer {
         }
         break;
       case ChordPlayMode.LargeColumnar:
-        console.log(123);
         playNoteInChord(chordNotes[0], 0);
         playNoteInChord(chordNotes[1].transpose(12), 0);
         playNoteInChord(chordNotes[2], 0);

@@ -23,10 +23,7 @@
 </template>
 
 <script setup lang="ts">
-// import ContentPage from "~/components/ContentPage.vue";
-console.log('index...');
 const {data} = await useFetch('/api/hello');
-console.log(data);
 </script>
 
 <style scoped lang="scss">

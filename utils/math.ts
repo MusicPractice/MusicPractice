@@ -1,5 +1,5 @@
 /**
- *
+ * 和python中的range一样。包左不包右
  * @param a
  * @param b
  */

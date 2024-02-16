@@ -126,7 +126,7 @@ function getChordClass(i: number, enumNumberString: string): Record<string, bool
  * @param enumNumberString
  */
 function renderNoteName(i: number, enumNumberString: string): string {
-  return new Note(3, i).getNoteNameFix() + ChordType[parseInt(enumNumberString)];
+  return new Note(3, i).getNoteName(true) + ChordType[parseInt(enumNumberString)];
 }
 </script>
 
