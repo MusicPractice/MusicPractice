@@ -69,7 +69,6 @@ export default class PianoPlayer {
       let src;
       try {
         src = (await import(`../assets/audio/${fileName}/${note}.mp3`)).default;
-        console.log(`加载成功：../assets/audio/${fileName}/${note}.mp3`);
       } catch (e) {
         console.log(e);
         // 加载不到就用默认音色

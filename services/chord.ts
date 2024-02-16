@@ -219,7 +219,7 @@ export default class Chord {
    * EMin ===> 3
    * 如果是 A#Maj CMin 这样的，会返回 -1，表示出错
    */
-  getLevelAsCScale() {
+  getLevelAsCMajorScale(): number {
     const base = this.root.getNoteName(true);
     return '_CDEFGAB'.indexOf(base);
   }

@@ -85,7 +85,7 @@ export default class ChordProgressionComputer {
           ChordProgression.fromNumbersInCScale(currentNote),
         );
         if (nextChord) {
-          setCount[nextChord.getLevelAsCScale()]++;
+          setCount[nextChord.getLevelAsCMajorScale()]++;
         }
       }
       ChordRate[currentNote] = dictToMatrix(counterToRate(setCount));
@@ -136,7 +136,7 @@ export default class ChordProgressionComputer {
           continue;
         }
         // 找到了下一个
-        setCount[nextChord.getLevelAsCScale()] +=
+        setCount[nextChord.getLevelAsCMajorScale()] +=
           2 ** (inputProgression.length - startIdx - 1);
       }
     }

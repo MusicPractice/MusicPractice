@@ -113,16 +113,16 @@
       </select>
     </div>
     <!--遍历所有附加音种类-->
-    <template v-for="(enumNumberString) in Object.keys(ChordExtension)" :key="`${enumNumberString}`">
-      <div v-if="typeof ChordExtension[enumNumberString] === 'string'" class="flex">
-        <h3 class="w-16 h-16">{{ ChordExtension[enumNumberString] }}</h3>
+    <template v-for="enumNumberString in Object.keys(ChordExtension)" :key="`${enumNumberString}`">
+      <div v-if="typeof ChordExtension[parseInt(enumNumberString)] === 'string'" class="flex">
+        <h3 class="w-16 h-16">{{ ChordExtension[parseInt(enumNumberString)] }}</h3>
         <!-- 遍历所有12音 -->
         <span class="flex" v-for="chordTypeStr in Object.keys(ChordType)" :key="`${chordTypeStr}`">
           <mp-button
             v-if="typeof ChordType[chordTypeStr] === 'string'"
             class="m-1 w-32"
             @mousedown="handleClickChordByArgs(currentScaleNote, parseInt(chordTypeStr), parseInt(enumNumberString))">
-            {{ ChordType[chordTypeStr] + '/' + ChordExtension[enumNumberString] }}
+            {{ ChordType[chordTypeStr] + '/' + ChordExtension[parseInt(enumNumberString)] }}
           </mp-button>
         </span>
       </div>

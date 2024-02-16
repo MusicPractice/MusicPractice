@@ -73,34 +73,34 @@ const cachedResults: Record<string, boolean> = {};
 /**
  * 判断当前这个和弦是否在调内
  */
-function isCurChordInScale(i: number, enumNumberString: string): boolean {
-  const key = `isCurChordInScale-${enumNumberString}-${i}`;
+function isCurChordInScale(i: number, enumNumber: number): boolean {
+  const key = `isCurChordInScale-${enumNumber}-${i}`;
   if (cachedResults[key]) {
     return cachedResults[key];
   }
   return (
-    new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+    new Chord(new Note(3, i), enumNumber, ChordExtension.None)
   ).getScale().includes(scaleNoteBefore.value);
 }
 
 /**
  * 判断下一个调的和弦是否在调内
  * @param i
- * @param enumNumberString
+ * @param enumNumber
  */
-function isNextChordInScale(i: number, enumNumberString: string): boolean {
-  const key = `isNextChordInScale-${enumNumberString}-${i}`;
+function isNextChordInScale(i: number, enumNumber: number): boolean {
+  const key = `isNextChordInScale-${enumNumber}-${i}`;
   if (cachedResults[key]) {
     return cachedResults[key];
   }
   return (
-    new Chord(new Note(3, i), parseInt(enumNumberString), ChordExtension.None)
+    new Chord(new Note(3, i), enumNumber, ChordExtension.None)
   ).getScale().includes(scaleNoteAfter.value);
 }
 
-function getChordClass(i: number, enumNumberString: string): Record<string, boolean> {
-  const before = isCurChordInScale(i, enumNumberString);
-  const after = isNextChordInScale(i, enumNumberString);
+function getChordClass(i: number, enumNumber: number): Record<string, boolean> {
+  const before = isCurChordInScale(i, enumNumber);
+  const after = isNextChordInScale(i, enumNumber);
   if (before && after) {
     return {
       [baseClass]: true,
@@ -117,10 +117,10 @@ function getChordClass(i: number, enumNumberString: string): Record<string, bool
 /**
  * 渲染和弦名称
  * @param i
- * @param enumNumberString
+ * @param enumNumber
  */
-function renderNoteName(i: number, enumNumberString: string): string {
-  return new Note(3, i).getNoteName(true) + ChordType[parseInt(enumNumberString)];
+function renderNoteName(i: number, enumNumber: number): string {
+  return new Note(3, i).getNoteName(true) + ChordType[enumNumber];
 }
 </script>
 
@@ -176,16 +176,15 @@ function renderNoteName(i: number, enumNumberString: string): string {
       </div>
 
     </div>
-    <template v-for="(enumNumberString) in Object.keys(ChordType)" :key="`compare-${enumNumberString}`">
-      <div v-if="typeof ChordType[enumNumberString] === 'string'" class="flex">
-
-        <h3 class="w-16 h-16">{{ ChordType[enumNumberString] }}</h3>
+    <template v-for="enumNumberString in Object.keys(ChordType)" :key="`compare-${enumNumberString}`">
+      <div v-if="typeof ChordType[parseInt(enumNumberString)] === 'string'" class="flex">
+        <h3 class="w-16 h-16">{{ ChordType[parseInt(enumNumberString)] }}</h3>
         <!-- 遍历所有12音 -->
         <template v-for="i in range(1, 13)" :key="`${enumNumberString}-${i}`">
           <button
-              :class="getChordClass(i, enumNumberString)"
+              :class="getChordClass(i, parseInt(enumNumberString))"
               @mousedown="handleClickChordByArgs(i, parseInt(enumNumberString), ChordExtension.None)">
-            {{ renderNoteName(i, enumNumberString) }}
+            {{ renderNoteName(i, parseInt(enumNumberString)) }}
           </button>
         </template>
       </div>
