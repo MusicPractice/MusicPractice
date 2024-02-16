@@ -1,29 +1,29 @@
 <template>
-  <app-alert/>
-  <NavBar/>
-  <NuxtPage class="bg-zinc-700 text-stone-200"/>
+  <app-alert />
+  <NavBar />
+  <NuxtPage class="bg-zinc-700 text-stone-200" />
 </template>
 
 <script lang="ts" setup>
-import NavBar from "~/components/specific/NavBar.vue";
-import AppAlert from "~/components/specific/app-alert.vue";
+import NavBar from '~/components/specific/NavBar.vue';
+import AppAlert from '~/components/specific/app-alert.vue';
 
 const router = useRouter();
-const token = useLocalStorage("token", "");
+const token = useLocalStorage('token', '');
 
 if (
-    router.currentRoute.value.path.startsWith("/_inside") &&
-    !token.value.startsWith("gh")
+  router.currentRoute.value.path.startsWith('/_inside') &&
+  !token.value.startsWith('gh')
 ) {
-  router.push("/");
+  router.push('/');
 }
 
 router.beforeEach((to, from, next) => {
-  if (to.path.startsWith("/_inside")) {
-    if (token.value.startsWith("gh")) {
+  if (to.path.startsWith('/_inside')) {
+    if (token.value.startsWith('gh')) {
       next();
     } else {
-      next("/");
+      next('/');
     }
   } else {
     next();
@@ -40,6 +40,35 @@ router.beforeEach((to, from, next) => {
   > :last-child {
     flex: 1;
   }
+
+  input {
+    background: transparent;
+    border: solid 1px;
+    border-radius: 5px;
+    margin: 0 5px;
+    padding: 2px;
+  }
+
+  select {
+    background: transparent;
+    margin: 4px;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:focus {
+      background-color: transparent;
+    }
+
+    option {
+      background: #3f3f46;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 * {
@@ -50,25 +79,6 @@ router.beforeEach((to, from, next) => {
   }
 }
 
-select {
-  background: transparent;
-
-  &:hover {
-    background-color: transparent;
-  }
-
-  &:focus {
-    background-color: transparent;
-  }
-
-  option {
-    background: transparent;
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-}
 
 table {
   width: 100%;

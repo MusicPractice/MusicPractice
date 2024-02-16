@@ -2,14 +2,14 @@
   <div class="Timbre">
     <h1>音色收集</h1>
     <div class="buttonArea">
-      <button
+      <mp-button
           v-for="(key, i) in Object.keys(timbres)"
           :key="i"
-          class="ring rounded px-1 ring-orange-800"
+          class="ring m-2"
           @click="handleClickTimbres(key)">
 
         {{ key }}
-      </button>
+      </mp-button>
     </div>
     <div class="kindArea">
       <h2>{{ currentSelectTimbres }}</h2>
@@ -34,13 +34,11 @@
 </template>
 
 <script lang="ts">
-useSeoMeta({
-  title: '个人音乐作品展 | 音色收集',
-  description: '学习乐理，分享音乐作品和音乐区up主',
-  keywords: '乐理学习, 音乐作品, 音乐区up主, 乐理笔记, Cubase, 库乐队, FLStudio',
-});
+
+import MpButton from '~/components/common/mp-button.vue';
 
 export default {
+  components: { MpButton },
   methods: {
     handleClickTimbres(name: string) {
       this.currentSelectTimbres = name;

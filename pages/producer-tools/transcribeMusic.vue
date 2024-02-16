@@ -2,7 +2,7 @@
   <div class="TranscribeMusic">
     <h1 class="text-3xl leading-loose">扒谱学习</h1>
     <div class="flex justify-center my-2">
-      <span>如果要查询游戏音乐</span>
+      <span>如果要查询游戏相关音乐</span>
       <input type="text" placeholder="请在这里输入游戏名称" v-model="inputName">
     </div>
     <main>
