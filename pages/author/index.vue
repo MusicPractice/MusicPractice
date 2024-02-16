@@ -1,14 +1,14 @@
 <template>
   <div class="About leading-loose p-4">
-    <h1 class="text-3xl">关于作者</h1>
+    <h1 class="text-3xl leading-loose">关于作者</h1>
     <main>
-      <h2>网站开设</h2>
+      <h2 class="text-center text-xl leading-loose">网站开设</h2>
       <p>发现使用Cubase编曲时，还要低头看手写的笔记、使用ipad的库乐队进行编曲时，ipad里的笔记软件翻来翻去会比较麻烦</p>
       <p>开设一个网站专门记录编曲作品</p>
       <p>顺便收录一些其他人的作品、音乐人推荐的链接</p>
       <p>顺便再做一做音乐训练小工具，提升识谱能力、练习耳朵</p>
       <p>希望这个网站能对一些人有所帮助！</p>
-      <h2>个人链接</h2>
+      <h2 class="text-center text-xl leading-loose">个人链接</h2>
       <p>B站账号：littlefean</p>
       <p>网易云音乐：小梵</p>
       <p>微信号：qeszc79513</p>
