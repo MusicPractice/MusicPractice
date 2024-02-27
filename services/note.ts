@@ -26,6 +26,17 @@ export default class Note {
   }
 
   /**
+   * 计算当前这个音符距离另一个音符有多少个半音
+   * 假设当前自己的音符是更高的音符
+   * @param other
+   */
+  distance(other: Note) {
+    let oDistance = this.octave - other.octave;
+    return oDistance * 12 + (this.idx - other.idx);
+
+  }
+
+  /**
    * 生成一个音符
    * @param octave {number} 第几大组
    * @param number {number} 从1开始 [1, 12]

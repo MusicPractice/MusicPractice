@@ -36,6 +36,7 @@ const links: Array<NavItem> = [
       {to: '/chordProgression', title: '和弦进行'},
       {to: '/transcribeMusic', title: '扒谱学习'},
       {to: '/timbre', title: '音色收集'},
+      {to: '/diapason', title: '音域表'},
     ]
   },
   {
